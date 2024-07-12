@@ -40,7 +40,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Run tests
-        run: nx e2e frontend --trace=on
+        run: npx nx e2e frontend --trace=on
 
   notify-push-event:
     runs-on: ubuntu-latest
