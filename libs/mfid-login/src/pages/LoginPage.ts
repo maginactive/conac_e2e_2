@@ -18,7 +18,7 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.emailInput = page.locator('[name="mfid_user[email]"]');
+    this.emailInput = page.locator("input[id='mfid_user[email]']");
     this.passwordInput = page.locator('[name="mfid_user[password]"]');
     this.agreeAndSignIn = page.locator('#submitto');
     this.loginWithMFid = page.locator("button[type='button']");
@@ -32,16 +32,20 @@ export class LoginPage extends BasePage {
   async login(email: string, password: string) {
     // TODO change process env to options
     await this.page.goto(process.env['BASE_URL'] + '/login');
+    console.log("url: ", this.page.url());
     await this.page.waitForLoadState();
     await this.loginWithMFid.click();
     console.log("click ok")
+    await this.page.waitForTimeout(3000);
     //print current url
     console.log("url1: ", this.page.url());
     // await expect(this.page).toHaveURL(
     //   new RegExp(`^${process.env['MFID_BASE_URL']}/sign_in?`)
     // );
     await this.emailInput.fill(email);
+    console.log("click ok 2")
     await this.agreeAndSignIn.click();
+    console.log("click ok 3")
     //print current url
     console.log("url2: ", this.page.url());
     // await expect(this.page).toHaveURL(
