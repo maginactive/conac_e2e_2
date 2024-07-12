@@ -5,7 +5,11 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # - package-ecosystem: "npm" # See documentation for possible values
+  #   directory: "/" # Location of package manifests
+  #   schedule:
+  #     interval: "daily"
+  - package-ecosystem: "npm" # Hệ sinh thái package là npm
+    directory: "/" # Vị trí của file package.json
     schedule:
-      interval: "daily"
+      interval: "daily" # Kiểm tra cập nhật hàng ngày

@@ -9,6 +9,9 @@ on:
         options:
           - api
           - frontend
+  push:
+    branches:
+      - main  # Thay đổi branch tùy vào yêu cầu của dự án
 
 jobs:
   call-test-on-circleci:
@@ -24,3 +27,15 @@ jobs:
           GHA_Meta: ${{ github.event.inputs.application }}
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
