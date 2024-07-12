@@ -1,0 +1,30 @@
+query UserStatus {
+  userStatus {
+    currentOffice {
+      tenantUid
+      identificationCode
+      name
+      featureFlags {
+        isCarryForwardTranslationAdjustmentEnabled
+        isCarryForwardOpsHistoryEnabled
+        isExportBalanceAndProfitLossEnabled
+        isMultipleLanguagesEnabled
+        isSsoEnabled
+        isViewerRoleEnabled
+        isSortOrderCompanySegmentEnabled
+        isSegmentWorksheetEnabled
+      }
+    }
+    currentOfficeMember {
+      id
+      name
+      email
+    }
+    lastOperatedConsolidationAccountingUnit {
+      id
+      nameJa
+      lockStatus
+    }
+    mfidIdentificationCode
+  }
+}

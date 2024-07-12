@@ -1,0 +1,8 @@
+query ImportingConsolidationPackages($consolidationAccountingUnitId: ID!) {
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    id
+    importingConsolidationPackages
+  }
+}

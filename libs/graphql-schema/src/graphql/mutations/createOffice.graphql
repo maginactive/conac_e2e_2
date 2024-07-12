@@ -1,0 +1,5 @@
+mutation CreateOffice($input: CreateOfficeMutationInput!) {
+  createOffice(input: $input) {
+    clientMutationId
+  }
+}

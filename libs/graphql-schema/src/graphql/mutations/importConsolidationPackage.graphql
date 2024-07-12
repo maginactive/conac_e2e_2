@@ -1,0 +1,11 @@
+mutation ImportConsolidationPackage(
+  $input: ImportConsolidationPackageMutationInput!
+) {
+  importConsolidationPackage(input: $input) {
+    clientMutationId
+    userErrors {
+      field
+      message
+    }
+  }
+}

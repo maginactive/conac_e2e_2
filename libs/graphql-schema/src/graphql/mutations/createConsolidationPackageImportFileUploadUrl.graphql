@@ -1,0 +1,8 @@
+mutation CreateConsolidationPackageImportFileUploadUrl(
+  $input: CreateConsolidationPackageImportFileUploadUrlMutationInput!
+) {
+  createConsolidationPackageImportFileUploadUrl(input: $input) {
+    key
+    url
+  }
+}

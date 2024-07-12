@@ -1,0 +1,30 @@
+query AllConsolidationJournals($id: ID!) {
+  consolidationAccountingUnit(consolidationAccountingUnitId: $id) {
+    allConsolidationJournals {
+      id
+      openingClassification
+      journalGroupKey
+      debitBalance
+      creditBalance
+      remark
+      company {
+        abbreviation
+      }
+      segment {
+        abbreviation
+      }
+      consolidationJournalType {
+        name
+        sortOrder
+      }
+      assignedConsolidatedAccount {
+        consolidatedAccount {
+          code {
+            code
+          }
+          nameJa
+        }
+      }
+    }
+  }
+}

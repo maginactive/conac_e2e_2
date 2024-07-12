@@ -1,0 +1,24 @@
+query ImportingConsolidationPackageJob(
+  $consolidationAccountingUnitId: ID!
+  $id: ID!
+) {
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    consolidationPackage(id: $id) {
+      importingConsolidationPackageJob {
+        ... on ConsolidationPackageImportFromCamidJob {
+          serviceName
+          camidResource: resource
+        }
+        ... on ConsolidationPackageImportFromCaJob {
+          serviceName
+          caResource: resource
+        }
+        ... on ConsolidationPackageImportFromExcelJob {
+          excelFileName
+        }
+      }
+    }
+  }
+}

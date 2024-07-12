@@ -1,0 +1,20 @@
+query SegmentStructures($consolidationAccountingUnitId: ID!) {
+    consolidationAccountingUnit(consolidationAccountingUnitId: $consolidationAccountingUnitId) {
+        submissionRequiredConsolidationPackages {
+            id
+            company {
+                nameJa
+            }
+            segmentStructure {
+                rows {
+                    segment {
+                        nameJa
+                    }
+                    segmentIdentificationKeys
+                    sortOrder
+                }
+                lastModifiedAt
+            }
+        }
+    }
+}

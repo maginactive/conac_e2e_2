@@ -1,0 +1,56 @@
+query ConsolidationPackagesDetail(
+  $consolidationAccountingUnitId: ID!
+  $conPkgId: ID!
+) {
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    id
+    nameJa
+    start
+    end
+    workClassification {
+      id
+      nameJa
+    }
+    submissionRequiredConsolidationPackages {
+      id
+      company {
+        id
+        nameJa
+        nameEn
+        abbreviation
+        currency
+        decimalPlace
+      }
+    }
+    consolidationPackage(id: $conPkgId) {
+      company {
+        integrationSettings {
+          ... on CamidIntegrationSetting {
+            id
+            integratedCompanyName
+            integrationService {
+              type
+              name
+            }
+            camidIntegrationResources {
+              name
+            }
+          }
+          ... on CaIntegrationSetting {
+            id
+            integratedCompanyName
+            integrationService {
+              type
+              name
+            }
+            caIntegrationResources {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}

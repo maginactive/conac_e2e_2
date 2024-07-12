@@ -1,0 +1,18 @@
+query WorkClassification($id: ID!) {
+  office {
+    workClassification(id: $id) {
+      workClassification {
+        id
+        code {
+          code
+        }
+        nameJa
+        nameEn
+        description
+        createdAt
+        updatedAt
+      }
+      accountingUnitUseType
+    }
+  }
+}

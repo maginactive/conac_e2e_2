@@ -1,0 +1,12 @@
+query ConsolidationJournalTypes {
+  office {
+    consolidationJournalTypes {
+      id
+      name
+      sortOrder
+      openingJournalType
+      createdAt
+      updatedAt
+    }
+  }
+}

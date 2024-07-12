@@ -1,0 +1,30 @@
+query CarryForwardOperationHistory($consolidationAccountingUnitId: ID!) {
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    carryForwardOperationHistories {
+      ... on CarryForwardExecuteOperationHistory {
+        id
+        createdAt
+        officeMemberName
+        preConsolidationAccountingUnit {
+          nameJa
+        }
+        beginningTranslationAdjustmentCsvFileId
+        openingJournalEntriesCsvFileId
+        preConsolidationJournalEntriesCsvFileId
+        preRetainedEarningsCsvFileId
+        preTranslationAdjustmentCsvFileId
+        retainedEarningsBroughtForwardCsvFileId
+      }
+      ... on CarryForwardResetOperationHistory {
+        id
+        createdAt
+        officeMemberName
+        preConsolidationAccountingUnit {
+          nameJa
+        }
+      }
+    }
+  }
+}

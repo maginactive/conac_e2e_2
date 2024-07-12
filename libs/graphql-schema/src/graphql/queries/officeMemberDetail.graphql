@@ -1,0 +1,21 @@
+query OfficeMemberDetail($id: ID!) {
+  office {
+    officeMember(officeMemberId: $id) {
+      id
+      name
+      email
+      description
+      roles {
+        id
+        nameJa
+      }
+      undeletableReason
+    }
+
+    roles {
+      id
+      nameJa
+      isUserManagement
+    }
+  }
+}

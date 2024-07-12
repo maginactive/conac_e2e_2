@@ -1,0 +1,22 @@
+mutation UpdateOrCreateConsolidationJournalImportSetting(
+  $input: UpdateOrCreateConsolidationJournalImportSettingMutationInput!
+) {
+  updateOrCreateConsolidationJournalImportSetting(input: $input) {
+    consolidationJournalImportSetting {
+      companyAbbreviationColumn
+      consolidatedAccountCodeColumn
+      consolidationAccountingUnitId
+      consolidationJournalGroupKeyColumn
+      consolidationJournalTypeId
+      creditBalanceColumn
+      debitBalanceColumn
+      endRow
+      id
+      tenantUid
+      remarkColumn
+      segmentAbbreviationColumn
+      sheetName
+      startRow
+    }
+  }
+}

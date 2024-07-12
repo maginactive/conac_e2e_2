@@ -1,0 +1,14 @@
+query WorkClassifications {
+  office {
+    workClassifications {
+      id
+      code {
+        code
+      }
+      nameJa
+      nameEn
+      createdAt
+      updatedAt
+    }
+  }
+}

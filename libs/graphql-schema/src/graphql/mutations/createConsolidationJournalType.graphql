@@ -1,0 +1,14 @@
+mutation CreateConsolidationJournalType(
+  $input: CreateConsolidationJournalTypeMutationInput!
+) {
+  createConsolidationJournalType(input: $input) {
+    clientMutationId
+    consolidationJournalType {
+      name
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

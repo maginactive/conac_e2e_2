@@ -1,0 +1,7 @@
+mutation ResetConsolidationPackage(
+  $input: ResetConsolidationPackageMutationInput!
+) {
+  resetConsolidationPackage(input: $input) {
+    clientMutationId
+  }
+}

@@ -1,0 +1,226 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@4.12.5
+  jq: circleci/jq@2.2.0
+
+parameters:
+  target:
+    type: enum
+    enum: [ api, frontend ]
+    default: api
+  GHA_Event:
+    type: string
+    default: ""
+  GHA_Actor:
+    type: string
+    default: ""
+  GHA_Action:
+    type: string
+    default: ""
+  GHA_Meta:
+    type: string
+    default: "api"
+
+workflows:
+#  trigger_run:
+#    jobs:
+#      - job_test:
+#          target: api
+#      - job_merge_report:
+#          target: api
+#          requires:
+#            - job_test
+  manual_run:
+    when: << pipeline.parameters.GHA_Action >>
+    jobs:
+      - job_test:
+          target: << pipeline.parameters.GHA_Meta >>
+      - job_merge_report:
+          target: << pipeline.parameters.GHA_Meta >>
+          requires:
+            - job_test
+
+jobs:
+  job_test:
+    circleci_ip_ranges: true
+    parameters:
+      target:
+        type: enum
+        enum: [ api, frontend ]
+    executor: exec_playwright
+    parallelism: 2
+    environment:
+      CI: true
+    steps:
+      - checkout
+      - yarn_install
+      - run_test:
+          target: << parameters.target >>
+
+  job_merge_report:
+    parameters:
+      target:
+        type: enum
+        enum: [ api, frontend ]
+    executor: exec_playwright
+    environment:
+      CI: true
+    working_directory: ~/<< parameters.target >>
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/<< parameters.target >>
+      - merge_report:
+          target: << parameters.target >>
+      - notify_to_slack_after_running:
+          target: << parameters.target >>
+
+executors:
+  exec_playwright:
+    docker:
+      - image: mcr.microsoft.com/playwright:v1.39.0-jammy
+
+
+commands:
+  yarn_install:
+    steps:
+      - restore_cache:
+          keys:
+            - node-cache-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - node-cache-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - node-cache-{{ .Environment.CACHE_VERSION }}-
+      - run: yarn install
+      - save_cache:
+          key: node-cache-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+  run_test:
+    parameters:
+      target:
+        type: enum
+        enum: [ api, frontend ]
+    steps:
+      - run:
+          name: Run Test
+          command: |
+            NODE_NUMBER="$((${CIRCLE_NODE_INDEX}+1))";
+            npx nx run << parameters.target >>:e2e --trace=on --shard=${NODE_NUMBER}/${CIRCLE_NODE_TOTAL} || exit 0;
+      - store_artifacts:
+          path: ./dist/.playwright/apps/<< parameters.target >>
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - dist/.playwright/apps/<< parameters.target >>
+
+
+  merge_report:
+    parameters:
+      target:
+        type: enum
+        enum: [ api, frontend ]
+    steps:
+      - run:
+          name: Merge reports
+          command: |
+            npx playwright merge-reports --config=merge-report.config.ts dist/.playwright/apps/<< parameters.target >>/playwright-report/
+      - store_artifacts:
+          path: reports
+
+
+  notify_to_slack_after_running:
+    parameters:
+      target:
+        type: enum
+        enum: [ api, frontend ]
+
+    steps:
+      - jq/install
+      - run:
+          name: Generate notification data
+          command: |
+            echo 'export TOTAL_PASSED=$(jq '.totalPassed' reports/summary/results.json)' >> "$BASH_ENV"
+            echo 'export TOTAL_FAILED=$(jq '.totalFailed' reports/summary/results.json)' >> "$BASH_ENV"
+            echo 'export TOTAL_FLAKY=$(jq '.totalFlaky' reports/summary/results.json)' >> "$BASH_ENV"
+            echo 'export TOTAL_SKIPPED=$(jq '.totalSkipped' reports/summary/results.json)' >> "$BASH_ENV"
+            echo 'export TOTAL_TIMEDOUT=$(jq '.totalTimedOut' reports/summary/results.json)' >> "$BASH_ENV"
+            echo 'export TOTAL_INTERRUPTED=$(jq '.totalInterrupted' reports/summary/results.json)' >> "$BASH_ENV"
+            echo 'export TOTAL_TESTCASES=$(jq '.total' reports/summary/results.json)' >> "$BASH_ENV"
+            echo 'export PASSED_RATIO=$(jq '.passedRatio' reports/summary/results.json)' >> "$BASH_ENV"
+            echo 'export TOTAL_DURATION=$(jq '.totalDuration' reports/summary/results.json)' >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Automation test result",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Summary:*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "• Total test cases: `${TOTAL_TESTCASES}`\n• Passed ratio: `${PASSED_RATIO}`"
+                    }
+                  ]
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Result Details:*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "✅ Passed: ${TOTAL_PASSED}\n\n❌ Failed: ${TOTAL_FAILED}\n\n⚠️ Flaky: ${TOTAL_FLAKY}",
+                      "emoji": true
+                    },
+                    {
+                      "type": "plain_text",
+                      "text": "⏭️ Skipped: ${TOTAL_SKIPPED}\n\n⏱️ Timed Out: ${TOTAL_TIMEDOUT}\n\n🚫 Interrupted: ${TOTAL_INTERRUPTED}",
+                      "emoji": true
+                    }
+                  ]
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Detailed Reports:*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "• <https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/${CIRCLE_NODE_INDEX}/reports/html/index.html|Playwright report>"
+                  }
+                }
+              ]
+            }

@@ -1,0 +1,5 @@
+mutation CreateTimeLimitedDownloadUrl($uploadedFileId: ID!) {
+  createTimeLimitedDownloadUrl(input: { uploadedFileId: $uploadedFileId }) {
+    downloadUrl
+  }
+}

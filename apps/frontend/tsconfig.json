@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "paths": {
+      "@conac/playwright-common": ["libs/playwright-common/src"],
+      "@conac/summary-reporter": ["libs/summary-reporter/src"],
+      "@conac/graphql-schema": ["libs/graphql-schema/src"],
+      "@conac/mfid-login": ["libs/mfid-login/src"],
+      "@conac/utils": ["libs/utils/src"],
+      "@/pages/*": ["apps/frontend/pages/*"],
+      "@/fixtures/*": ["apps/frontend/fixtures/*"],
+      "@/data/*": ["apps/frontend/data/*"],
+      "@/constants/*": ["apps/frontend/constants/*"],
+      "@/utils/*": ["apps/frontend/utils/*"]
+    }
+  }
+}

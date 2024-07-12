@@ -1,0 +1,21 @@
+query ExchangeRates($id: ID!) {
+  office {
+    consolidationCurrency
+  }
+  consolidationAccountingUnit(consolidationAccountingUnitId: $id) {
+    exchangeRates {
+      id
+      averageRate
+      currentRate
+      updatedAt
+      company {
+        id
+        abbreviation
+        nameJa
+        currency
+        createdAt
+        decimalPlace
+      }
+    }
+  }
+}

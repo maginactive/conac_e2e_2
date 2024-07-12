@@ -1,0 +1,16 @@
+query ConsolidationPackageImportSetting($id: ID!) {
+  office {
+    consolidationPackageImportSetting(id: $id) {
+      id
+      name
+      trialBalanceImportSettings {
+        sheetName
+        startRow
+        endRow
+        accountCodeColumn
+        accountNameColumn
+        balanceColumn
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+query AssignedConsolidatedAccounts($id: ID!) {
+  consolidationAccountingUnit(consolidationAccountingUnitId: $id) {
+    assignedConsolidatedAccounts {
+      id
+      sortOrder
+      consolidatedAccount {
+        id
+        nameJa
+        accountType
+        code {
+          code
+        }
+        consolidatedAccountSubCategory {
+          id
+        }
+      }
+      isDeletable
+    }
+  }
+  office {
+    consolidatedAccountSubCategories {
+      id
+      nameJa
+      consolidatedAccountCategory {
+        id
+        nameJa
+        financialStatementType
+      }
+    }
+    consolidatedAccounts {
+      id
+      nameJa
+      code {
+        code
+      }
+      consolidatedAccountSubCategory {
+        id
+      }
+    }
+  }
+}

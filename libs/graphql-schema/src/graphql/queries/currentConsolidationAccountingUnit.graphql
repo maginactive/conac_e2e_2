@@ -1,0 +1,9 @@
+query CurrentConsolidationAccountingUnit($consolidationAccountingUnitId: ID!) {
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    id
+    nameJa
+    lockStatus
+  }
+}

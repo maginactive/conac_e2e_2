@@ -1,0 +1,7 @@
+mutation DeleteCamidIntegrationSetting(
+  $input: DeleteCamidIntegrationSettingMutationInput!
+) {
+  deleteCamidIntegrationSetting(input: $input) {
+    clientMutationId
+  }
+}

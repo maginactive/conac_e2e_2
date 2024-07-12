@@ -1,0 +1,8 @@
+mutation GenerateConsolidatedAccountFileUploadUrl(
+  $input: GenerateConsolidatedAccountFileUploadUrlMutationInput!
+) {
+  generateConsolidatedAccountFileUploadUrl(input: $input) {
+    key
+    url
+  }
+}

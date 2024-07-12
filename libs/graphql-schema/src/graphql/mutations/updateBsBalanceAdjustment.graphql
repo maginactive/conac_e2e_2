@@ -1,0 +1,7 @@
+mutation UpdateBsBalanceAdjustment(
+  $input: UpdateBsBalanceAdjustmentsMutationInput!
+) {
+  updateBsBalanceAdjustment(input: $input) {
+    clientMutationId
+  }
+}

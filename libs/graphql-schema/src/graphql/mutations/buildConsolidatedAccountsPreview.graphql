@@ -1,0 +1,48 @@
+mutation BuildConsolidatedAccountsPreview(
+  $input: BuildConsolidatedAccountsPreviewMutationInput!
+) {
+  buildConsolidatedAccountsPreview(input: $input) {
+    preview {
+      errors {
+        message
+      }
+      aggregatedErrors {
+        message
+        positions {
+          column
+          rows
+        }
+      }
+      previews {
+        accountSide
+        amountType {
+          amountType
+          errors
+          value
+        }
+        code {
+          errors
+          value
+        }
+        conversionType {
+          errors
+          type
+          value
+        }
+        nameEn {
+          errors
+          value
+        }
+        nameJa {
+          errors
+          value
+        }
+        subCategory {
+          errors
+          subCategoryId
+          value
+        }
+      }
+    }
+  }
+}

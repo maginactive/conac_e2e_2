@@ -1,0 +1,8 @@
+query LoginOffices {
+  loginOffices {
+    tenantUid
+    name
+    identificationCode
+    isUnderContract
+  }
+}

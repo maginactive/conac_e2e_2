@@ -1,0 +1,29 @@
+mutation BuildCaAccountConversionRulePreview(
+  $input: BuildCaAccountConversionRulePreviewMutationInput!
+) {
+  buildCaAccountConversionRulePreview(input: $input) {
+    accountConversionRulePreviews {
+      code
+      consolidatedAccount {
+        id
+        nameJa
+        code {
+          code
+        }
+        accountType
+      }
+      id
+      inversionMultiplier
+      isAdd
+      names
+      skipReason
+      workClassificationId
+    }
+    errors
+    trialBalancePreviewsBeforeConversionForCa {
+      accountCode
+      accountName
+      balance
+    }
+  }
+}

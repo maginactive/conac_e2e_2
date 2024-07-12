@@ -1,0 +1,50 @@
+query ConsolidationAccountingUnitsDetail($id: ID!) {
+  office {
+    consolidationAccountingUnit(id: $id) {
+      lockStatus
+      id
+      nameJa
+      nameEn
+      start
+      end
+      preConsolidationAccountingUnitId
+      workClassification {
+        id
+        nameJa
+        code {
+          code
+        }
+      }
+      description
+      allConsolidationPackages {
+        id
+        consolidationProcess
+        sortOrder
+        submissionRequired
+        company {
+          id
+          nameJa
+        }
+        isUsedConPkg
+        isUsedConacJournal
+      }
+      carryForwardDataExists
+    }
+    consolidationAccountingUnits {
+      id
+      nameJa
+    }
+    companies {
+      id
+      nameJa
+      abbreviation
+    }
+    workClassifications {
+      id
+      nameJa
+      code {
+        code
+      }
+    }
+  }
+}

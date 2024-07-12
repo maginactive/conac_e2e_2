@@ -1,0 +1,5 @@
+mutation UpdateSegmentSortOrder($input: UpdateSegmentSortOrderMutationInput!) {
+  updateSegmentSortOrder(input: $input) {
+    clientMutationId
+  }
+}

@@ -1,0 +1,5 @@
+mutation DeleteCompany($input: DeleteCompanyMutationInput!) {
+  deleteCompany(input: $input) {
+    clientMutationId
+  }
+}

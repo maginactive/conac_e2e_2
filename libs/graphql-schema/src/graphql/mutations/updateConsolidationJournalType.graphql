@@ -1,0 +1,13 @@
+mutation UpdateConsolidationJournalType(
+  $input: UpdateConsolidationJournalTypeMutationInput!
+) {
+  updateConsolidationJournalType(input: $input) {
+    consolidationJournalType {
+      name
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

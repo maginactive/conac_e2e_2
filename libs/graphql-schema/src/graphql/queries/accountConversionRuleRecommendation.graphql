@@ -1,0 +1,28 @@
+query AccountConversionRuleRecommendation(
+  $input: AccountConversionRuleRecommendationQueryInput!
+) {
+  accountConversionRuleRecommendation(input: $input) {
+    error
+    results {
+      code
+      recommends {
+        consolidatedAccount {
+          id
+          nameJa
+          nameEn
+          accountType
+          code {
+            code
+          }
+          consolidatedAccountSubCategory {
+            consolidatedAccountCategory {
+              financialStatementType
+            }
+          }
+        }
+        similarity
+        autoFill
+      }
+    }
+  }
+}

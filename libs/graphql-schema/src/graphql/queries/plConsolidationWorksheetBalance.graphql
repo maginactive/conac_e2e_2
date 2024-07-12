@@ -1,0 +1,108 @@
+query PLConsolidationWorksheetBalance($consolidationAccountingUnitId: ID!) {
+  office {
+    consolidationJournalTypes {
+      id
+      name
+      plConsolidationJournalSummary(
+        consolidationAccountingUnitId: $consolidationAccountingUnitId
+      ) {
+        rows {
+          assignedConsolidatedAccount {
+            id
+          }
+          id
+          totalBalance
+        }
+      }
+    }
+  }
+
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    includedConsolidationProcessTypeConsolidationPackages {
+      id
+      company {
+        id
+        abbreviation
+      }
+      submissionRequired
+      profitAndLoss {
+        rows {
+          assignedConsolidatedAccount {
+            id
+          }
+          translatedBalance
+          adjustedTranslatedBalance
+        }
+      }
+    }
+
+    plConsolidationWorksheetBalance {
+      rows {
+        assignedConsolidatedAccount {
+          id
+          sortOrder
+          consolidatedAccount {
+            consolidatedAccountSubCategory {
+              sortOrder
+            }
+            nameJa
+            code {
+              code
+            }
+            consolidatedAccountSubCategory {
+              id
+              nameJa
+            }
+          }
+        }
+        totalBalance
+        adjustmentBalance
+        adjustedBalance
+      }
+      summary {
+        grossProfitAmount
+        grossProfitItems {
+          subCategory {
+            id
+            nameJa
+          }
+          amount
+        }
+        operatingProfitAmount
+        operatingProfitItems {
+          subCategory {
+            id
+            nameJa
+          }
+          amount
+        }
+        ordinaryProfitAmount
+        ordinaryProfitItems {
+          subCategory {
+            id
+            nameJa
+          }
+          amount
+        }
+        profitAttributableToOwnersOfParentAmount
+        profitAttributableToOwnersOfParentItems {
+          subCategory {
+            id
+            nameJa
+          }
+          amount
+        }
+        profitBeforeIncomeTaxesAmount
+        profitBeforeIncomeTaxesItems {
+          subCategory {
+            id
+            nameJa
+          }
+          amount
+        }
+      }
+    }
+  }
+}

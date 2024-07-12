@@ -1,0 +1,7 @@
+mutation UpsertConsolidatedAccountImportSetting(
+  $input: UpsertConsolidatedAccountImportSettingMutationInput!
+) {
+  upsertConsolidatedAccountImportSetting(input: $input) {
+    clientMutationId
+  }
+}

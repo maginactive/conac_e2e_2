@@ -1,0 +1,5 @@
+mutation LoginOfficeSso($originalTenantUid: String!) {
+  loginOfficeSso(input: { tenantUidLongValue: $originalTenantUid }) {
+    hasPermission
+  }
+}

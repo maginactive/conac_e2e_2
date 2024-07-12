@@ -1,0 +1,12 @@
+query Tenants {
+  tenants {
+    id
+    name
+    identificationCode
+    isCreatable
+    isUnderContract
+    tenantUsers {
+      id
+    }
+  }
+}

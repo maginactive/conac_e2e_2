@@ -1,0 +1,24 @@
+query ConsolidatedAccount($id: ID!) {
+  office {
+    consolidatedAccount(id: $id) {
+      accountSide
+      accountType
+      amountType
+      code {
+        code
+      }
+      description
+      conversionType
+      id
+      nameEn
+      nameJa
+      consolidatedAccountSubCategory {
+        nameJa
+      }
+      associatedConsolidationAccountingUnits {
+        id
+        nameJa
+      }
+    }
+  }
+}

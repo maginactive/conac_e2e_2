@@ -1,0 +1,19 @@
+mutation CreateCompany($input: CreateCompanyMutationInput!) {
+  createCompany(input: $input) {
+    clientMutationId
+    company {
+      id
+      tenantUid
+      nameEn
+      nameJa
+      decimalPlace
+      remarks
+      currency
+      abbreviation
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

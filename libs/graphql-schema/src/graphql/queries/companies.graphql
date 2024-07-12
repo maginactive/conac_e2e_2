@@ -1,0 +1,16 @@
+query Companies {
+  office {
+    companies {
+      id
+      nameJa
+      nameEn
+      tenantUid
+      decimalPlace
+      abbreviation
+      currency
+      sortOrder
+      createdAt
+      updatedAt
+    }
+  }
+}

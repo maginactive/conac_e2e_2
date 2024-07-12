@@ -1,0 +1,39 @@
+query ReservedConsolidatedAccounts {
+  office {
+    toBeReservedConsolidatedAccounts {
+      foreignCurrencyTranslationAdjustmentAccounts {
+        id
+        nameJa
+        accountType
+        code {
+          code
+        }
+      }
+      foreignExchangeLossesNoeAccounts {
+        id
+        nameJa
+        accountType
+        code {
+          code
+        }
+      }
+      profitBSAccounts {
+        id
+        nameJa
+        accountType
+        code {
+          code
+        }
+      }
+      retainedEarningsBroughtForwardAccounts {
+        id
+        nameJa
+        accountType
+        code {
+          code
+        }
+      }
+    }
+    isUpdatableReservedConsolidatedAccounts
+  }
+}

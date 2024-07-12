@@ -1,0 +1,8 @@
+query CurrentUserPermissions {
+  currentUserPermissions {
+    companyId
+    function
+    id
+    tenantUid
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "mfid-login",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/mfid-login/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/mfid-login"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/mfid-login/**/*.ts",
+          "libs/mfid-login/package.json"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

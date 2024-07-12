@@ -1,0 +1,20 @@
+mutation CreateWorkClassification(
+  $input: CreateWorkClassificationMutationInput!
+) {
+  createWorkClassification(input: $input) {
+    clientMutationId
+    workClassification {
+      id
+      nameEn
+      nameJa
+      code {
+        code
+      }
+      description
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

@@ -1,0 +1,7 @@
+mutation ExportPLSheetBySubCategory(
+  $input: ExportProfitLossSheetBySubCategoryMutationInput!
+) {
+  exportPLSheetBySubCategory(input: $input) {
+    downloadUrl
+  }
+}

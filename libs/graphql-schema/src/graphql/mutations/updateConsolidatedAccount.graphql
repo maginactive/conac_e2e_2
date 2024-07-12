@@ -1,0 +1,13 @@
+mutation UpdateConsolidatedAccount(
+  $input: UpdateConsolidatedAccountMutationInput!
+) {
+  updateConsolidatedAccount(input: $input) {
+    consolidatedAccount {
+      nameJa
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

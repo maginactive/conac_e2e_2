@@ -1,0 +1,7 @@
+mutation ImportConsolidationJournals(
+  $input: ImportConsolidationJournalsMutationInput!
+) {
+  importConsolidationJournals(input: $input) {
+    clientMutationId
+  }
+}

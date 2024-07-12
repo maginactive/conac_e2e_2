@@ -1,0 +1,8 @@
+query ConsolidationPackageImportSettingsIdAndName {
+  office {
+    consolidationPackageImportSettings {
+      id
+      name
+    }
+  }
+}

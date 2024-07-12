@@ -1,0 +1,43 @@
+query IntegrationSettings {
+  office {
+    integrationSettings {
+      ... on CamidIntegrationSetting {
+        id
+        integratedAt
+        integratedCompanyName
+        integrationService {
+          name
+        }
+        camidIntegrationResources {
+          type
+          name
+        }
+        company {
+          abbreviation
+          nameJa
+        }
+      }
+
+      ... on CaIntegrationSetting {
+        id
+        integratedAt
+        integratedCompanyName
+        integrationService {
+          name
+        }
+        caIntegrationResources {
+          type
+          name
+        }
+        company {
+          abbreviation
+          nameJa
+        }
+      }
+    }
+
+    companies {
+      id
+    }
+  }
+}

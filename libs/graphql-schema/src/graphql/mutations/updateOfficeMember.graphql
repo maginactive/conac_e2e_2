@@ -1,0 +1,11 @@
+mutation UpdateOfficeMember($input: UpdateOfficeMemberMutationInput!) {
+  updateOfficeMember(input: $input) {
+    errors {
+      error
+      message
+    }
+    officeMember {
+      name
+    }
+  }
+}

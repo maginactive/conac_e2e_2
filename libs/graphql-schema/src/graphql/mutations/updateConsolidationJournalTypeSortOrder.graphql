@@ -1,0 +1,7 @@
+mutation UpdateConsolidationJournalTypeSortOrder(
+  $input: UpdateConsolidationJournalTypeSortOrderMutationInput!
+) {
+  updateConsolidationJournalTypeSortOrder(input: $input) {
+    clientMutationId
+  }
+}

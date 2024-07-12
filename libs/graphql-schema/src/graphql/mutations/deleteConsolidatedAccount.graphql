@@ -1,0 +1,7 @@
+mutation DeleteConsolidatedAccount(
+  $input: DeleteConsolidatedAccountMutationInput!
+) {
+  deleteConsolidatedAccount(input: $input) {
+    clientMutationId
+  }
+}

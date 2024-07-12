@@ -1,0 +1,5 @@
+mutation ResetCarryForward($input: ResetCarryForwardMutationInput!) {
+  resetCarryForward(input: $input) {
+    subscriptionId
+  }
+}

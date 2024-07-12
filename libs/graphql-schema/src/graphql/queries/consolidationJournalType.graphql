@@ -1,0 +1,15 @@
+query ConsolidationJournalType($id: ID!) {
+  office {
+    consolidationJournalType(id: $id) {
+      id
+      name
+      openingJournalType
+      remarks
+
+      associatedConsolidationAccountingUnits {
+        id
+        nameJa
+      }
+    }
+  }
+}

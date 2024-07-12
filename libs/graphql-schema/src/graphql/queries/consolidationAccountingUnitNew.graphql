@@ -1,0 +1,21 @@
+query ConsolidationAccountingUnitNew {
+  office {
+    workClassifications {
+      id
+      nameJa
+      code {
+        code
+      }
+    }
+    consolidationAccountingUnits {
+      id
+      nameJa
+      workClassificationId
+    }
+    companies {
+      id
+      nameJa
+      abbreviation
+    }
+  }
+}

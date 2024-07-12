@@ -1,0 +1,18 @@
+query ConsolidationAccountingUnits {
+  office {
+    consolidationAccountingUnits {
+      id
+      workClassification {
+        code {
+          code
+        }
+        nameJa
+      }
+      nameJa
+      start
+      end
+      order
+      lockStatus
+    }
+  }
+}

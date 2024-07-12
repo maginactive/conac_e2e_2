@@ -1,0 +1,249 @@
+query CarryForwardPreview($id: ID!) {
+  consolidationAccountingUnit(consolidationAccountingUnitId: $id) {
+    __typename
+    id
+    nameJa
+    preConsolidationAccountingUnit {
+      __typename
+      id
+      nameJa
+    }
+    carryForwardPreview {
+      inexecutableReason
+      retainedEarningsBroughtForwardPreview {
+        __typename
+        warnings
+        rows {
+          __typename
+          assignedConsolidatedAccount {
+            __typename
+            id
+            sortOrder
+            consolidatedAccount {
+              __typename
+              id
+              code {
+                code
+              }
+              nameJa
+              consolidatedAccountSubCategory {
+                __typename
+                id
+                sortOrder
+                nameJa
+              }
+            }
+          }
+          adjustedBalance
+          totalBalance
+          adjustmentBalance
+          amountPerConsolidationPackage {
+            __typename
+            consolidationPackage {
+              __typename
+              id
+              sortOrder
+              company {
+                __typename
+                id
+                abbreviation
+              }
+            }
+            amount
+          }
+          amountPerConsolidationJournal {
+            __typename
+            consolidationJournalType {
+              __typename
+              id
+              name
+              sortOrder
+            }
+            amount
+          }
+        }
+        prevRetainedEarningsSummary {
+          __typename
+          adjustedBalance
+          totalBalance
+          adjustmentBalance
+          amountPerConsolidationPackage {
+            __typename
+            consolidationPackage {
+              __typename
+              id
+              sortOrder
+              company {
+                __typename
+                id
+                abbreviation
+              }
+            }
+            amount
+          }
+          amountPerConsolidationJournal {
+            __typename
+            consolidationJournalType {
+              __typename
+              id
+              name
+              sortOrder
+            }
+            amount
+          }
+        }
+        retainedEarningsBroughtForward {
+          __typename
+          assignedConsolidatedAccount {
+            __typename
+            id
+            sortOrder
+            consolidatedAccount {
+              __typename
+              id
+              code {
+                code
+              }
+              nameJa
+              consolidatedAccountSubCategory {
+                __typename
+                id
+                sortOrder
+                nameJa
+              }
+            }
+          }
+          adjustedBalance
+          totalBalance
+          adjustmentBalance
+          amountPerCompany {
+            ... on ExcludedInCurrentConsolidationProcess {
+              __typename
+              company {
+                __typename
+                id
+                abbreviation
+              }
+            }
+            ... on IncludedInCurrentConsolidationProcess {
+              __typename
+              consolidationPackage {
+                __typename
+                id
+                sortOrder
+                company {
+                  __typename
+                  id
+                  abbreviation
+                }
+              }
+              amount
+            }
+          }
+          amountPerConsolidationJournal {
+            __typename
+            consolidationJournalType {
+              __typename
+              id
+              name
+              sortOrder
+            }
+            amount
+          }
+        }
+        diff {
+          __typename
+          adjustedBalance
+          totalBalance
+          adjustmentBalance
+          amountPerCompany {
+            __typename
+            company {
+              __typename
+              id
+              abbreviation
+            }
+            amount
+          }
+          amountPerConsolidationJournal {
+            __typename
+            consolidationJournalType {
+              __typename
+              id
+              name
+              sortOrder
+            }
+            amount
+          }
+        }
+      }
+      translationAdjustmentPreview {
+        warnings
+        prevRows {
+          consolidationPackage {
+            id
+            sortOrder
+            company {
+              id
+              abbreviation
+            }
+          }
+          items {
+            assignedConsolidatedAccount {
+              sortOrder
+              consolidatedAccount {
+                id
+                nameJa
+              }
+            }
+            adjustedTranslatedBalance
+          }
+        }
+        currentRows {
+          ... on IncludedInCurrentConsolidationProcessForTA {
+            consolidationPackage {
+              id
+              company {
+                id
+                abbreviation
+              }
+            }
+            items {
+              adjustedTranslatedBalance
+              consolidatedAccount {
+                id
+                nameJa
+              }
+            }
+          }
+          ... on ExcludedInCurrentConsolidationProcessForTA {
+            company {
+              id
+              abbreviation
+            }
+            items {
+              adjustedTranslatedBalance
+              consolidatedAccount {
+                id
+                nameJa
+              }
+            }
+          }
+        }
+        diffs {
+          company {
+            id
+            abbreviation
+          }
+          amountPerConsolidatedAccount {
+            consolidatedAccount {
+              id
+              nameJa
+            }
+            amount
+          }
+        }
+      }
+    }
+  }
+}

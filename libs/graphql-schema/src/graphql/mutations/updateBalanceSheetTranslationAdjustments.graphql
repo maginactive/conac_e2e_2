@@ -1,0 +1,11 @@
+mutation UpdateBSTranslationAdjustments(
+  $input: UpdateBSTranslationAdjustmentsMutationInput!
+) {
+  updateBSTranslationAdjustments(input: $input) {
+    clientMutationId
+    userErrors {
+      message
+      field
+    }
+  }
+}

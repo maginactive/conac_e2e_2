@@ -1,0 +1,7 @@
+mutation ImportConsolidationPackageFromExternalService(
+  $input: ImportConsolidationPackageFromExternalServiceMutationInput!
+) {
+  importConsolidationPackageFromExternalService(input: $input) {
+    clientMutationId
+  }
+}

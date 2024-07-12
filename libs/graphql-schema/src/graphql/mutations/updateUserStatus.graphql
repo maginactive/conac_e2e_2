@@ -1,0 +1,5 @@
+mutation UpdateUserStatus($input: UpdateUserStatusMutationInput!) {
+  updateUserStatus(input: $input) {
+    clientMutationId
+  }
+}

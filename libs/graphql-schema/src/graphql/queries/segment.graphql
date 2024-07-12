@@ -1,0 +1,11 @@
+query Segment($segmentId: ID!) {
+  office {
+    segment(segmentId: $segmentId) {
+      id
+      nameJa
+      nameEn
+      abbreviation
+      description
+    }
+  }
+}

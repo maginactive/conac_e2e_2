@@ -1,0 +1,93 @@
+query BSConsolidationWorksheetBalance($consolidationAccountingUnitId: ID!) {
+  office {
+    consolidationJournalTypes {
+      id
+      name
+      bsConsolidationJournalSummary(
+        consolidationAccountingUnitId: $consolidationAccountingUnitId
+      ) {
+        rows {
+          assignedConsolidatedAccount {
+            id
+          }
+          id
+          totalBalance
+        }
+      }
+    }
+  }
+
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    includedConsolidationProcessTypeConsolidationPackages {
+      id
+      company {
+        id
+        abbreviation
+      }
+      submissionRequired
+      balanceSheet {
+        rows {
+          assignedConsolidatedAccount {
+            id
+          }
+          translatedBalance
+          adjustedTranslatedBalance
+        }
+      }
+    }
+
+    bsConsolidationWorksheetBalance {
+      rows {
+        assignedConsolidatedAccount {
+          id
+          sortOrder
+          consolidatedAccount {
+            consolidatedAccountSubCategory {
+              sortOrder
+            }
+            nameJa
+            code {
+              code
+            }
+            consolidatedAccountSubCategory {
+              id
+              nameJa
+            }
+          }
+        }
+        totalBalance
+        adjustmentBalance
+        adjustedBalance
+      }
+      summary {
+        assetsAmount
+        assetsItems {
+          subCategory {
+            id
+            nameJa
+          }
+          amount
+        }
+        balanceAmount
+        liabilitiesAmount
+        liabilitiesItems {
+          subCategory {
+            id
+            nameJa
+          }
+          amount
+        }
+        netAssetsAmount
+        netAssetsItems {
+          subCategory {
+            id
+            nameJa
+          }
+          amount
+        }
+      }
+    }
+  }
+}

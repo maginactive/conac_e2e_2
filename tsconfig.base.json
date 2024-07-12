@@ -1,0 +1,31 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@conac/api-service": ["libs/api-service/src/index.ts"],
+      "@conac/conac-api": ["libs/conac-api/src/index.ts"],
+      "@conac/mfid-login": ["libs/mfid-login/src/index.ts"],
+      "@conac/summary-reporter": ["libs/summary-reporter/src/index.ts"],
+      "@conac/playwright-common": ["libs/playwright-common/src/index.ts"],
+      "@conac/testrail-reporter": ["libs/playwright-common/src/testrail-reporter/index.ts"],
+      "@myapp/*": ["apps/frontend/*"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

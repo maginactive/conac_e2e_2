@@ -1,0 +1,7 @@
+mutation updateAssignedConsolidatedAccounts(
+  $input: UpdateAssignedConsolidatedAccountsMutationInput!
+) {
+  updateAssignedConsolidatedAccounts(input: $input) {
+    clientMutationId
+  }
+}

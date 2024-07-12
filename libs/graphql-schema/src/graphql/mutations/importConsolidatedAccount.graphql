@@ -1,0 +1,7 @@
+mutation ImportConsolidatedAccount(
+  $input: ImportConsolidatedAccountMutationInput!
+) {
+  importConsolidatedAccount(input: $input) {
+    clientMutationId
+  }
+}

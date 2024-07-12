@@ -1,0 +1,28 @@
+query ConsolidatedAccounts {
+  office {
+    consolidatedAccountImportSetting {
+      id
+    }
+    consolidatedAccountSubCategories {
+      id
+      nameJa
+      accountSide
+    }
+    consolidatedAccounts {
+      accountSide
+      accountType
+      amountType
+      code {
+        code
+      }
+      conversionType
+      id
+      nameJa
+      consolidatedAccountSubCategory {
+        nameJa
+      }
+      createdAt
+      updatedAt
+    }
+  }
+}

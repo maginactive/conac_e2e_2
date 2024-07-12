@@ -1,0 +1,5 @@
+mutation UpdateExchangeRates($input: UpdateExchangeRatesMutationInput!) {
+  updateExchangeRates(input: $input) {
+    clientMutationId
+  }
+}

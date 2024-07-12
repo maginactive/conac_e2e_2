@@ -1,0 +1,12 @@
+query OfficeMembers {
+  office {
+    officeMembers {
+      id
+      name
+      email
+      roles {
+        nameJa
+      }
+    }
+  }
+}

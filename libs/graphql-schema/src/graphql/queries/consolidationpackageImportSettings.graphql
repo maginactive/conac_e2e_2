@@ -1,0 +1,10 @@
+query ConsolidationPackageImportSettings {
+  office {
+    consolidationPackageImportSettings {
+      id
+      name
+      operatedAt
+      createdAt
+    }
+  }
+}

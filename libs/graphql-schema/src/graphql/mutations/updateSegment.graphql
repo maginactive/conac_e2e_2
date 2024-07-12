@@ -1,0 +1,12 @@
+mutation UpdateSegment($input: UpdateSegmentMutationInput!) {
+  updateSegment(input: $input) {
+    clientMutationId
+    segment {
+      nameJa
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

@@ -1,0 +1,11 @@
+schema: libs/graphql-schema/src/graphql/schema.graphql
+documents: libs/graphql-schema/src/graphql/**/*.graphql
+generates:
+  libs/graphql-schema/src/graphql/__generated__/:
+    preset: client
+config:
+  scalars:
+    LocalDate: string
+    UUID: string
+    Date: string
+    DateTime: string

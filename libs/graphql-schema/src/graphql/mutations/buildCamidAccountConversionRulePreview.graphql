@@ -1,0 +1,29 @@
+mutation BuildCamidAccountConversionRulePreview(
+  $input: BuildCamidAccountConversionRulePreviewMutationInput!
+) {
+  buildCamidAccountConversionRulePreview(input: $input) {
+    accountConversionRulePreviews {
+      code
+      consolidatedAccount {
+        id
+        nameJa
+        code {
+          code
+        }
+        accountType
+      }
+      id
+      inversionMultiplier
+      isAdd
+      names
+      skipReason
+      workClassificationId
+    }
+    errors
+    trialBalancePreviewsBeforeConversionForCamid {
+      accountCode
+      accountName
+      balance
+    }
+  }
+}

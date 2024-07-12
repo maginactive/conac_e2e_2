@@ -1,0 +1,33 @@
+{
+  "name": "graphql-schema",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/graphql-schema/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/graphql-schema"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/graphql-schema/**/*.ts",
+          "libs/graphql-schema/package.json"
+        ]
+      }
+    },
+    "graphql-codegen": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "yarn graphql-codegen --config libs/graphql-schema/codegen.yml"
+      }
+    }
+  },
+  "tags": []
+}

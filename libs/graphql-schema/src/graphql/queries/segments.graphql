@@ -1,0 +1,10 @@
+query Segments {
+  office {
+    segments {
+      id
+      nameJa
+      abbreviation
+      sortOrder
+    }
+  }
+}

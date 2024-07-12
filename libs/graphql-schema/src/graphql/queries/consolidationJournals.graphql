@@ -1,0 +1,35 @@
+query ConsolidationJournals($consolidationAccountingUnitId: ID!, $typeId: ID!) {
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    consolidationJournalImportSetting(consolidationJournalTypeId: $typeId) {
+      id
+    }
+    consolidationJournals(journalTypeId: $typeId) {
+      journalGroupKey
+      debitTotalBalance
+      creditTotalBalance
+      rows {
+        id
+        openingClassification
+        company {
+          abbreviation
+        }
+        segment {
+          abbreviation
+        }
+        assignedConsolidatedAccount {
+          consolidatedAccount {
+            code {
+              code
+            }
+            nameJa
+          }
+        }
+        debitBalance
+        creditBalance
+        remark
+      }
+    }
+  }
+}

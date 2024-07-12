@@ -1,0 +1,26 @@
+query Company($id: ID!) {
+  office {
+    company(id: $id) {
+      id
+      abbreviation
+      nameJa
+      nameEn
+      decimalPlace
+      currency
+      remarks
+      associatedData {
+        consolidationAccountingUnit {
+          id
+          nameJa
+        }
+        data
+      }
+      associatedRoles {
+        associatedOfficeMembers {
+          id
+          name
+        }
+      }
+    }
+  }
+}

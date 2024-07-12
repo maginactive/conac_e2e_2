@@ -1,0 +1,19 @@
+query ConsolidationPackages($id: ID!) {
+  consolidationAccountingUnit(consolidationAccountingUnitId: $id) {
+    id
+    start
+    end
+    workClassification {
+      nameJa
+    }
+    submissionRequiredConsolidationPackages {
+      id
+      company {
+        abbreviation
+        nameJa
+      }
+      createdAt
+      latestUpdatedAt
+    }
+  }
+}

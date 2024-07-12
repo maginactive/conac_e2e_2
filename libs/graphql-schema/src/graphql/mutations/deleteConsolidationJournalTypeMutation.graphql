@@ -1,0 +1,7 @@
+mutation DeleteConsolidationJournalType(
+  $input: DeleteConsolidationJournalTypeMutationInput!
+) {
+  deleteConsolidationJournalType(input: $input) {
+    clientMutationId
+  }
+}

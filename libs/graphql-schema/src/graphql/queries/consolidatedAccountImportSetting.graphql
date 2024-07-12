@@ -1,0 +1,22 @@
+query ConsolidatedAccountImportSetting {
+  office {
+    consolidatedAccountSubCategories {
+      nameJa
+      consolidatedAccountCategory {
+        financialStatementType
+      }
+    }
+    consolidatedAccountImportSetting {
+      id
+      sheetName
+      startRow
+      endRow
+      nameJaColumn
+      nameEnColumn
+      codeColumn
+      amountTypeColumn
+      conversionTypeColumn
+      consolidatedAccountSubCategoryColumn
+    }
+  }
+}

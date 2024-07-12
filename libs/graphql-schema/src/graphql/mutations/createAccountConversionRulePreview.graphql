@@ -1,0 +1,37 @@
+mutation CreateAccountConversionRulePreview(
+  $input: CreateAccountConversionRulePreviewInput!
+) {
+  createAccountConversionRulePreview(input: $input) {
+    uploadedFileId
+    accountConversionRulePreviews {
+      id
+      code
+      names
+      isAdd
+      skipReason
+      inversionMultiplier
+      consolidatedAccount {
+        id
+        accountType
+      }
+    }
+    errors {
+      sheetErrors {
+        id
+        message
+        sheetNames
+      }
+      rowErrors {
+        id
+        message
+        sheets {
+          positions {
+            column
+            rows
+          }
+          sheetName
+        }
+      }
+    }
+  }
+}

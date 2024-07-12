@@ -1,0 +1,12 @@
+mutation CreateSegment($input: CreateSegmentMutationInput!) {
+  createSegment(input: $input) {
+    clientMutationId
+    segment {
+      nameJa
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

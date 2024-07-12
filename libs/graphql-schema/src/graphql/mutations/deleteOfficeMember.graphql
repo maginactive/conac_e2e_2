@@ -1,0 +1,5 @@
+mutation DeleteOfficeMember($input: DeleteOfficeMemberMutationInput!) {
+  deleteOfficeMember(input: $input) {
+    clientMutationId
+  }
+}

@@ -1,0 +1,14 @@
+mutation UpdateConsolidationPackageImportSetting(
+  $input: UpdateConsolidationPackageImportSettingMutationInput!
+) {
+  updateConsolidationPackageImportSetting(input: $input) {
+    clientMutationId
+    consolidationPackageImportSetting {
+      name
+    }
+    userErrors {
+      message
+      field
+    }
+  }
+}

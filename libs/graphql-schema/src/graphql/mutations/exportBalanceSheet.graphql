@@ -1,0 +1,5 @@
+mutation ExportBalanceSheet($input: ExportBalanceSheetMutationInput!) {
+  exportBalanceSheet(input: $input) {
+    downloadUrl
+  }
+}

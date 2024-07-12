@@ -1,0 +1,16 @@
+mutation UpdateConsolidationAccountingUnit(
+  $input: UpdateConsolidationAccountingUnitMutationInput!
+) {
+  updateConsolidationAccountingUnit(input: $input) {
+    consolidationAccountingUnit {
+      id
+      nameJa
+      lockStatus
+      workClassificationId
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

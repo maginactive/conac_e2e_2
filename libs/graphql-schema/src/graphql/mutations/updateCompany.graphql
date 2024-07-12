@@ -1,0 +1,12 @@
+mutation updateCompany($input: UpdateCompanyMutationInput!) {
+  updateCompany(input: $input) {
+    clientMutationId
+    company {
+      nameJa
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

@@ -1,0 +1,7 @@
+mutation ExportBSBySubCategory(
+  $input: ExportBalanceSheetBySubCategoryMutationInput!
+) {
+  exportBSBySubCategory(input: $input) {
+    downloadUrl
+  }
+}

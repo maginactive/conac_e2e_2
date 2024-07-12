@@ -1,0 +1,5 @@
+mutation UpdateCompanySortOrder($input: UpdateCompanySortOrderMutationInput!) {
+    updateCompanySortOrder(input: $input) {
+        clientMutationId
+    }
+}

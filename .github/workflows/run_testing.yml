@@ -1,0 +1,26 @@
+name: Manual run testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      application:
+        type: choice
+        description: Application
+        options:
+          - api
+          - frontend
+
+jobs:
+  call-test-on-circleci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+        name: checkout
+      - name: Dispatch circleci workflow
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
+        with:
+          GHA_Meta: ${{ github.event.inputs.application }}
+        env:
+          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}

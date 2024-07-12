@@ -1,0 +1,12 @@
+query ConsolidatedAccountsNameAndCode {
+  office {
+    consolidatedAccounts {
+      id
+      nameJa
+      code {
+        code
+      }
+      accountType
+    }
+  }
+}

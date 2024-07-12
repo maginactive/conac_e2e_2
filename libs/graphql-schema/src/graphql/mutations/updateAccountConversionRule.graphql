@@ -1,0 +1,7 @@
+mutation UpdateAccountConversionRule(
+  $input: UpdateAccountConversionRuleMutationInput!
+) {
+  updateAccountConversionRule(input: $input) {
+    clientMutationId
+  }
+}

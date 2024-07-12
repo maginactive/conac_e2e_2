@@ -1,0 +1,11 @@
+mutation UpdatePLTranslationAdjustments(
+  $input: UpdatePLTranslationAdjustmentsMutationInput!
+) {
+  updatePLTranslationAdjustments(input: $input) {
+    clientMutationId
+    userErrors {
+      message
+      field
+    }
+  }
+}

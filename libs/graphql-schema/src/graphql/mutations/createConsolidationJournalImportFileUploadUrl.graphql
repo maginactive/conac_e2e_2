@@ -1,0 +1,8 @@
+mutation CreateConsolidationJournalImportFileUploadUrl(
+  $input: CreateConsolidationJournalImportFileUploadUrlMutationInput!
+) {
+  createConsolidationJournalImportFileUploadUrl(input: $input) {
+    key
+    url
+  }
+}

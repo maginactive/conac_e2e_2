@@ -1,0 +1,7 @@
+mutation UpdatePlBalanceAdjustment(
+  $input: UpdatePlBalanceAdjustmentsMutationInput!
+) {
+  updatePlBalanceAdjustment(input: $input) {
+    clientMutationId
+  }
+}

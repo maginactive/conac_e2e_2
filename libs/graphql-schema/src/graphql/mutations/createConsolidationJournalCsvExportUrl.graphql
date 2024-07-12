@@ -1,0 +1,7 @@
+mutation CreateConsolidationJournalCsvExportUrl(
+  $input: CreateConsolidationJournalCsvExportUrlMutationInput!
+) {
+  createConsolidationJournalCsvExportUrl(input: $input) {
+    downloadUrl
+  }
+}

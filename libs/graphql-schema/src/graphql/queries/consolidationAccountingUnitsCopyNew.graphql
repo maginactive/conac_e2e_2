@@ -1,0 +1,47 @@
+query ConsolidationAccountingUnitsCopyNew($id: ID!) {
+  office {
+    workClassifications {
+      id
+      nameJa
+      code {
+        code
+      }
+    }
+    consolidationAccountingUnit(id: $id) {
+      id
+      nameJa
+      nameEn
+      start
+      end
+      preConsolidationAccountingUnitId
+      workClassification {
+        id
+        nameJa
+        code {
+          code
+        }
+      }
+      description
+      allConsolidationPackages {
+        id
+        consolidationProcess
+        sortOrder
+        submissionRequired
+        company {
+          id
+          nameJa
+        }
+      }
+    }
+    consolidationAccountingUnits {
+      id
+      nameJa
+      workClassificationId
+    }
+    companies {
+      id
+      nameJa
+      abbreviation
+    }
+  }
+}

@@ -1,0 +1,14 @@
+mutation CreateConsolidationAccountingUnit(
+  $input: CreateConsolidationAccountingUnitMutationInput!
+) {
+  createConsolidationAccountingUnit(input: $input) {
+    clientMutationId
+    userErrors {
+      message
+      field
+    }
+    consolidationAccountingUnit {
+      nameJa
+    }
+  }
+}

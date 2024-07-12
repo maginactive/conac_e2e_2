@@ -1,0 +1,13 @@
+query OfficeMemberNew {
+  office {
+    unregisteredTenantUsers {
+      id
+      name
+      email
+    }
+    roles {
+      id
+      nameJa
+    }
+  }
+}

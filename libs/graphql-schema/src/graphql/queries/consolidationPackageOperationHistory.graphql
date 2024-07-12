@@ -1,0 +1,59 @@
+query ConsolidationPackageOperationHistory(
+  $consolidationAccountingUnitId: ID!
+  $id: ID!
+) {
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    consolidationPackage(id: $id) {
+      consolidationPackageOperationHistories {
+        ... on TrialBalanceImportOperationHistory {
+          id
+          createdAt
+          historyType
+          officeMemberName
+          rawExcelFileId
+          rawExcelFileName
+          conversionRuleFileId
+        }
+        ... on FinancialStatementModificationOperationHistory {
+          id
+          createdAt
+          historyType
+          officeMemberName
+          consolidationPackageOperationTarget
+          financialStatementOperationTarget
+          accountNamesJa
+          accountNamesEn
+        }
+        ... on ConsolidationPackageResetOperationHistory {
+          id
+          createdAt
+          historyType
+          officeMemberName
+          resetBalanceAdjustment
+          resetConsolidationPackage
+          resetTranslationAdjustment
+        }
+        ... on TrialBalanceImportFromCamidOperationHistory {
+          id
+          createdAt
+          historyType
+          officeMemberName
+          conversionRuleFileId
+          rawResponseFileId
+          consolidationPackageOperationTarget
+        }
+        ... on TrialBalanceImportFromCaOperationHistory {
+          id
+          createdAt
+          historyType
+          officeMemberName
+          conversionRuleFileId
+          beforeConversionTbFileId
+          consolidationPackageOperationTarget
+        }
+      }
+    }
+  }
+}

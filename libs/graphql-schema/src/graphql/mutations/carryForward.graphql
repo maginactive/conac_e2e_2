@@ -1,0 +1,52 @@
+mutation CarryForward($input: CarryForwardInput!) {
+  carryForward(input: $input) {
+    __typename
+    subscriptionId
+    error {
+      currentConsolidationAccountingUnit {
+        preConsolidationAccountingUnitId
+      }
+      errorsPerConPkgOfRetainedEarningsBroughtForward {
+        errors {
+          ... on CarryForwardConsolidationPackageError {
+            __typename
+            error
+          }
+          ... on CarryForwardConsolidationJournalError {
+            __typename
+            consolidationJournalTypeName
+            consolidationJournalTypeId
+            journalGroupKeys
+          }
+        }
+        previousConsolidationPackage {
+          __typename
+          id
+          sortOrder
+          company {
+            __typename
+            nameJa
+          }
+        }
+      }
+      errorsPerAssignedConsolidatedAccountOfRetainedEarningsBroughtForward {
+        previousAssignedConsolidatedAccount {
+          id
+          sortOrder
+          consolidatedAccount {
+            nameJa
+          }
+        }
+        errors {
+          consolidationJournalTypeName
+          consolidationJournalTypeId
+          journalGroupKeys
+        }
+      }
+      lackingAssignedConsolidatedAccountsOfTranslationAdjustment {
+        id
+        nameJa
+      }
+    }
+  }
+}

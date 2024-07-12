@@ -1,0 +1,15 @@
+query ConsolidationAccountingUnitOperationHistories {
+  office {
+    conacUnitOperationHistories {
+      id
+      createdAt
+      officeMember {
+        name
+      }
+      type
+      consolidationAccountingUnit {
+        nameJa
+      }
+    }
+  }
+}

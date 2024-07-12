@@ -1,0 +1,5 @@
+mutation LoginOffice($tenantUid: ID!) {
+  loginOffice(input: { tenantUid: $tenantUid }) {
+    clientMutationId
+  }
+}

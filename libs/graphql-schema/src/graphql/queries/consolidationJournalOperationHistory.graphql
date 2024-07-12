@@ -1,0 +1,23 @@
+query ConsolidationJournalOperationHistory(
+  $typeId: ID!
+  $consolidationAccountingUnitId: ID!
+) {
+  office {
+    consolidationJournalType(id: $typeId) {
+      consolidationJournalOperationHistory(
+        consolidationAccountingUnitId: $consolidationAccountingUnitId
+      ) {
+        id
+        uploadedFile {
+          id
+          fileName
+        }
+        officeMember {
+          name
+        }
+        operation
+        createdAt
+      }
+    }
+  }
+}

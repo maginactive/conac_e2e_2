@@ -1,0 +1,22 @@
+query AssignedConsolidatedAccountsForConsolidationPackageImport($id: ID!) {
+  consolidationAccountingUnit(consolidationAccountingUnitId: $id) {
+    id
+    assignedConsolidatedAccounts {
+      id
+      consolidatedAccount {
+        id
+        nameJa
+        nameEn
+        accountType
+        code {
+          code
+        }
+        consolidatedAccountSubCategory {
+          consolidatedAccountCategory {
+            financialStatementType
+          }
+        }
+      }
+    }
+  }
+}

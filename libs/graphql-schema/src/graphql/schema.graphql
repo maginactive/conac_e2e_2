@@ -1,0 +1,2753 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+"Marks the field, argument, input field or enum value as deprecated"
+directive @deprecated(
+    "The reason for the deprecation"
+    reason: String = "No longer supported"
+  ) on FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM_VALUE | INPUT_FIELD_DEFINITION
+
+"Directs the executor to include this field or fragment only when the `if` argument is true"
+directive @include(
+    "Included when true."
+    if: Boolean!
+  ) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"Directs the executor to skip this field or fragment when the `if` argument is true."
+directive @skip(
+    "Skipped when true."
+    if: Boolean!
+  ) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"Exposes a URL that specifies the behaviour of this scalar."
+directive @specifiedBy(
+    "The URL that specifies the behaviour of this scalar."
+    url: String!
+  ) on SCALAR
+
+interface CarryForwardOperationHistory {
+  createdAt: DateTime!
+  id: ID!
+  officeMemberName: String
+  preConsolidationAccountingUnit: ConsolidationAccountingUnit!
+  tenantUid: ID!
+}
+
+interface ConsolidationPackageImportJob {
+  jobType: ConsolidationPackageImportJobType!
+}
+
+interface ConsolidationPackageOperationHistory {
+  createdAt: DateTime!
+  historyType: ConsolidationPackageHistoryType!
+  id: ID!
+  officeMemberName: String
+}
+
+interface IntegrationSetting {
+  id: ID!
+  integratedAt: DateTime!
+  integrationService: IntegrationService!
+}
+
+union CarryForwardPerCompanyError = CarryForwardConsolidationJournalError | CarryForwardConsolidationPackageError
+
+union CurrentAmountPerCompany = ExcludedInCurrentConsolidationProcess | IncludedInCurrentConsolidationProcess
+
+union TranslationAdjustmentPreviewCurrentRow = ExcludedInCurrentConsolidationProcessForTA | IncludedInCurrentConsolidationProcessForTA
+
+type AccountCodePreview {
+  assignedConsolidatedAccount: AssignedConsolidatedAccount
+  errors: [previewConsolidationJournal!]!
+  value: String!
+}
+
+type AccountConversionRulePreview {
+  code: String!
+  consolidatedAccount: ConsolidatedAccount
+  consolidatedAccountId: ID
+  id: ID
+  inversionMultiplier: InversionMultiplier!
+  isAdd: Boolean!
+  names: [String!]!
+  skipReason: ConversionRuleSkipReason
+  workClassificationId: ID!
+}
+
+type AccountConversionRuleRecommendCandidate {
+  autoFill: Boolean!
+  consolidatedAccount: ConsolidatedAccount!
+  similarity: Float!
+}
+
+type AccountConversionRuleRecommendItemType {
+  code: String!
+  recommends: [AccountConversionRuleRecommendCandidate!]!
+}
+
+type AccountConversionRuleRecommendation {
+  error: SimilarAccountRecommendationFailureReason
+  results: [AccountConversionRuleRecommendItemType!]!
+}
+
+type AmountPerConsolidatedAccount {
+  amount: Float
+  consolidatedAccount: ConsolidatedAccount!
+}
+
+type AmountPerConsolidationJournalType {
+  amount: Float!
+  consolidationJournalType: ConsolidationJournalType!
+}
+
+type AssignedConsolidatedAccount {
+  consolidatedAccount: ConsolidatedAccount!
+  id: ID!
+  isDeletable: Boolean!
+  sortOrder: Int!
+  workClassificationId: ID!
+}
+
+type BSConsolidationWorksheet {
+  consolidationAccountingUnitId: ID!
+  rows: [BSConsolidationWorksheetBalanceRow!]!
+  summary: BSSummary!
+}
+
+type BSConsolidationWorksheetBalanceRow {
+  adjustedBalance: Float!
+  adjustmentBalance: Float!
+  assignedConsolidatedAccount: AssignedConsolidatedAccount!
+  totalBalance: Float!
+}
+
+type BSSummary {
+  assetsAmount: Float!
+  assetsItems: [FSSummaryRow!]!
+  balanceAmount: Float!
+  liabilitiesAmount: Float!
+  liabilitiesItems: [FSSummaryRow!]!
+  netAssetsAmount: Float!
+  netAssetsItems: [FSSummaryRow!]!
+}
+
+type BSTranslationAdjustment {
+  afterTranslationBalance: Float!
+  assignedConsolidatedAccountId: ID!
+  beforeTranslationBalance: Float
+  financialStatementId: ID!
+  id: ID!
+  openingClassification: OpeningClassification!
+  remark: String
+  tenantUid: ID!
+}
+
+type BalanceAdjustment {
+  amount: Float!
+  assignedConsolidatedAccountId: ID!
+  id: ID!
+  remark: String
+}
+
+type BalancePreview {
+  errors: [BalancePreviewError!]!
+  value: Float
+}
+
+type BalancePreviewError {
+  error: BalanceError!
+  message: String!
+}
+
+type BalanceSheet {
+  adjustedSummary: BSSummary!
+  balanceAdjustments: [BalanceAdjustment!]!
+  id: ID!
+  rows: [FinancialStatementRow!]!
+  translatedSummary: BSSummary!
+  translationAdjustments: [BSTranslationAdjustment!]!
+}
+
+type BuildCaAccountConversionRulePreviewMutationPayload {
+  accountConversionRulePreviews: [AccountConversionRulePreview!]!
+  errors: [String!]!
+  trialBalancePreviewsBeforeConversionForCa: [TrialBalancePreviewBeforeConversionRowType!]!
+}
+
+type BuildCamidAccountConversionRulePreviewMutationPayload {
+  accountConversionRulePreviews: [AccountConversionRulePreview!]!
+  errors: [String!]!
+  trialBalancePreviewsBeforeConversionForCamid: [TrialBalancePreviewBeforeConversionRowType!]!
+}
+
+type BuildConsolidatedAccountsPreviewMutationPayload {
+  clientMutationId: String
+  preview: ConsolidatedAccountPreview!
+}
+
+type CaIntegrationResourceType {
+  name: String!
+  type: CaIntegrationResource!
+}
+
+type CaIntegrationSetting implements IntegrationSetting {
+  caIntegrationResources: [CaIntegrationResourceType!]!
+  company: Company!
+  id: ID!
+  integratedAt: DateTime!
+  integratedCompanyName: String
+  integrationService: IntegrationService!
+}
+
+type CamidIntegrationResourceType {
+  name: String!
+  type: CamidIntegrationResource!
+}
+
+type CamidIntegrationSetting implements IntegrationSetting {
+  camidIntegrationResources: [CamidIntegrationResourceType!]!
+  company: Company!
+  id: ID!
+  integratedAt: DateTime!
+  integratedCompanyName: String
+  integrationService: IntegrationService!
+}
+
+type CarryForwardConsolidationJournalError {
+  consolidationJournalTypeId: ID!
+  consolidationJournalTypeName: String!
+  journalGroupKeys: [String!]!
+}
+
+type CarryForwardConsolidationPackageError {
+  error: String!
+}
+
+type CarryForwardError {
+  currentConsolidationAccountingUnit: ConsolidationAccountingUnit!
+  errorsPerAssignedConsolidatedAccountOfRetainedEarningsBroughtForward: [ErrorsPerAssignedConsolidatedAccount!]!
+  errorsPerConPkgOfRetainedEarningsBroughtForward: [ErrorsPerConsolidationPackage!]!
+  lackingAssignedConsolidatedAccountsOfTranslationAdjustment: [ConsolidatedAccount!]!
+}
+
+type CarryForwardExecuteOperationHistory implements CarryForwardOperationHistory {
+  beginningTranslationAdjustmentCsvFileId: ID!
+  createdAt: DateTime!
+  id: ID!
+  officeMemberName: String
+  openingJournalEntriesCsvFileId: ID!
+  preConsolidationAccountingUnit: ConsolidationAccountingUnit!
+  preConsolidationJournalEntriesCsvFileId: ID!
+  preRetainedEarningsCsvFileId: ID!
+  preTranslationAdjustmentCsvFileId: ID!
+  retainedEarningsBroughtForwardCsvFileId: ID!
+  tenantUid: ID!
+}
+
+type CarryForwardExecutingStatusNotification {
+  consolidationAccountingUnitId: ID!
+  status: JobStatus!
+}
+
+type CarryForwardPayload {
+  error: CarryForwardError
+  subscriptionId: String
+}
+
+type CarryForwardPerAssignedConsolidatedAccountError {
+  consolidationJournalTypeId: ID!
+  consolidationJournalTypeName: String!
+  journalGroupKeys: [String!]!
+}
+
+type CarryForwardPreview {
+  inexecutableReason: [CarryForwardInexecutableReasonType!]!
+  retainedEarningsBroughtForwardPreview: RetainedEarningsBroughtForwardPreview
+  translationAdjustmentPreview: TranslationAdjustmentPreview!
+}
+
+type CarryForwardResetOperationHistory implements CarryForwardOperationHistory {
+  createdAt: DateTime!
+  id: ID!
+  officeMemberName: String
+  preConsolidationAccountingUnit: ConsolidationAccountingUnit!
+  tenantUid: ID!
+}
+
+type Company {
+  abbreviation: String!
+  associatedData: [CompanyRelatingDataByUnit!]!
+  associatedRoles: [Role!]!
+  createdAt: DateTime!
+  currency: Currency!
+  decimalPlace: Int!
+  id: ID!
+  "integration setting list for external services"
+  integrationSettings: [IntegrationSetting!]!
+  nameEn: String
+  nameJa: String!
+  remarks: String
+  sortOrder: Int!
+  tenantUid: ID!
+  updatedAt: DateTime!
+}
+
+type CompanyAbbreviationPreview {
+  companyId: ID
+  errors: [CompanyAbbreviationPreviewError!]!
+  value: String!
+}
+
+type CompanyAbbreviationPreviewError {
+  error: CompanyAbbreviationError!
+  message: String!
+}
+
+type CompanyRelatingDataByUnit {
+  consolidationAccountingUnit: ConsolidationAccountingUnit!
+  data: [CompanyRelatingDataType!]!
+}
+
+type ConsolidatedAccount {
+  accountSide: AccountSide!
+  accountType: AccountType!
+  amountType: AmountType!
+  associatedConsolidationAccountingUnits: [ConsolidationAccountingUnit!]!
+  code: ConsolidatedAccountCode!
+  consolidatedAccountSubCategory: ConsolidatedAccountSubCategory!
+  conversionType: ConversionType!
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  nameEn: String
+  nameJa: String!
+  tenantUid: ID!
+  updatedAt: DateTime!
+}
+
+type ConsolidatedAccountAmountTypePreview {
+  amountType: AmountType
+  errors: [String!]!
+  value: String!
+}
+
+type ConsolidatedAccountCategory {
+  accountSide: AccountSide!
+  financialStatementType: FinancialStatementType!
+  id: ID!
+  nameEn: String!
+  nameJa: String!
+}
+
+type ConsolidatedAccountCode {
+  code: String!
+}
+
+type ConsolidatedAccountCodePreview {
+  errors: [String!]!
+  value: String!
+}
+
+type ConsolidatedAccountConversionTypePreview {
+  errors: [String!]!
+  type: ConversionType
+  value: String!
+}
+
+type ConsolidatedAccountError {
+  message: String!
+}
+
+type ConsolidatedAccountImportSetting {
+  amountTypeColumn: String!
+  codeColumn: String!
+  consolidatedAccountSubCategoryColumn: String!
+  conversionTypeColumn: String!
+  endRow: Int!
+  id: ID!
+  nameEnColumn: String
+  nameJaColumn: String!
+  sheetName: String!
+  startRow: Int!
+  tenantUid: ID!
+}
+
+type ConsolidatedAccountNameEnPreview {
+  errors: [String!]!
+  value: String
+}
+
+type ConsolidatedAccountNameJaPreview {
+  errors: [String!]!
+  value: String!
+}
+
+type ConsolidatedAccountPreview {
+  aggregatedErrors: [ConsolidatedAccountPreviewAggregatedError!]!
+  errors: [ConsolidatedAccountError!]!
+  previews: [ConsolidatedAccountPreviewRow!]!
+}
+
+type ConsolidatedAccountPreviewAggregatedError {
+  message: String!
+  positions: [ExcelRowErrorPositionType!]!
+}
+
+type ConsolidatedAccountPreviewRow {
+  accountSide: AccountSide
+  amountType: ConsolidatedAccountAmountTypePreview!
+  code: ConsolidatedAccountCodePreview!
+  conversionType: ConsolidatedAccountConversionTypePreview!
+  nameEn: ConsolidatedAccountNameEnPreview!
+  nameJa: ConsolidatedAccountNameJaPreview!
+  subCategory: ConsolidatedAccountSubCategoryPreview!
+}
+
+type ConsolidatedAccountSubCategory {
+  accountSide: AccountSide!
+  consolidatedAccountCategory: ConsolidatedAccountCategory!
+  id: ID!
+  nameEn: String!
+  nameJa: String!
+  sortOrder: Int!
+}
+
+type ConsolidatedAccountSubCategoryPreview {
+  errors: [String!]!
+  subCategoryId: ID
+  value: String!
+}
+
+type ConsolidationAccountingUnit {
+  allConsolidationJournals: [ConsolidationJournalRowType!]!
+  allConsolidationPackages: [ConsolidationPackage!]!
+  assignedConsolidatedAccounts: [AssignedConsolidatedAccount!]!
+  bsConsolidationWorksheetBalance: BSConsolidationWorksheet!
+  carryForwardDataExists: Boolean!
+  "Check if carry forward is executing in this unit"
+  carryForwardExecuting: CarryForwardJobType
+  "Check if carry forward is executing in the next unit to unlock current unit"
+  carryForwardExecutingInNextConsolidationAccountingUnit: Boolean!
+  carryForwardOperationHistories: [CarryForwardOperationHistory!]!
+  carryForwardPreview: CarryForwardPreview!
+  consolidationJournalImportSetting(consolidationJournalTypeId: ID!): ConsolidationJournalImportSetting
+  consolidationJournals(journalTypeId: ID!): [ConsolidationJournal!]!
+  consolidationPackage(id: ID!): ConsolidationPackage!
+  description: String
+  end: String!
+  exchangeRate(companyId: ID!): ExchangeRate
+  exchangeRates: [ExchangeRate!]!
+  id: ID!
+  importingConsolidationPackages: Boolean!
+  includedConsolidationProcessTypeConsolidationPackages: [ConsolidationPackage!]!
+  lockStatus: UnitLockStatus!
+  nameEn: String
+  nameJa: String!
+  order: Int!
+  plConsolidationWorksheetBalance: PLConsolidationWorksheetBalance!
+  preConsolidationAccountingUnit: ConsolidationAccountingUnit
+  preConsolidationAccountingUnitId: ID
+  start: String!
+  submissionRequiredConsolidationPackages: [ConsolidationPackage!]!
+  tenantUid: ID!
+  workClassification: WorkClassification!
+  workClassificationId: ID!
+}
+
+type ConsolidationAccountingUnitOperationHistory {
+  consolidationAccountingUnit: ConsolidationAccountingUnit!
+  createdAt: DateTime!
+  id: ID!
+  officeMember: OfficeMember
+  tenantUid: ID!
+  type: ConsolidationAccountingUnitOperationType!
+}
+
+type ConsolidationJournal {
+  creditTotalBalance: Float!
+  debitTotalBalance: Float!
+  journalGroupKey: String!
+  rows: [ConsolidationJournalRowType!]!
+}
+
+type ConsolidationJournalImportSetting {
+  companyAbbreviationColumn: String!
+  consolidatedAccountCodeColumn: String!
+  consolidationAccountingUnitId: ID!
+  consolidationJournalGroupKeyColumn: String!
+  consolidationJournalTypeId: ID!
+  creditBalanceColumn: String!
+  debitBalanceColumn: String!
+  endRow: Int!
+  id: ID!
+  remarkColumn: String
+  segmentAbbreviationColumn: String
+  sheetName: String!
+  startRow: Int!
+  tenantUid: ID!
+}
+
+type ConsolidationJournalOperationHistory {
+  createdAt: DateTime!
+  id: ID!
+  officeMember: OfficeMember
+  operation: JournalOperation!
+  uploadedFile: UploadedFile
+}
+
+type ConsolidationJournalPreview {
+  errors: [ConsolidationJournalPreviewError!]!
+  journalGroupKey: JournalGroupKeyPreview!
+  rows: [ConsolidationJournalPreviewRow!]!
+  totalCreditBalance: Float!
+  totalDebitBalance: Float!
+}
+
+type ConsolidationJournalPreviewError {
+  error: ConsolidationJournalError!
+  message: String!
+}
+
+type ConsolidationJournalPreviewRow {
+  accountCode: AccountCodePreview!
+  companyAbbreviation: CompanyAbbreviationPreview!
+  creditBalance: BalancePreview!
+  debitBalance: BalancePreview!
+  errors: [ConsolidationJournalPreviewRowError!]!
+  id: ID!
+  journalGroupKey: JournalGroupKeyPreview!
+  openingClassification: OpeningClassification!
+  remark: RemarkPreview!
+  segmentAbbreviation: SegmentAbbreviationPreview!
+}
+
+type ConsolidationJournalPreviewRowError {
+  error: ConsolidationJournalRowError!
+  message: String!
+}
+
+type ConsolidationJournalRowType {
+  assignedConsolidatedAccount: AssignedConsolidatedAccount!
+  company: Company!
+  consolidationAccountingUnitId: ID!
+  consolidationJournalType: ConsolidationJournalType!
+  creditBalance: Float
+  debitBalance: Float
+  id: ID!
+  journalGroupKey: String!
+  openingClassification: OpeningClassification!
+  remark: String
+  segment: Segment
+  tenantUid: ID!
+}
+
+type ConsolidationJournalSummaryRowType {
+  assignedConsolidatedAccount: AssignedConsolidatedAccount!
+  consolidationAccountingUnitId: ID!
+  consolidationJournalType: ConsolidationJournalType!
+  creditBalance: Float!
+  debitBalance: Float!
+  id: ID!
+  tenantUid: ID!
+  totalBalance: Float!
+}
+
+type ConsolidationJournalSummaryType {
+  rows: [ConsolidationJournalSummaryRowType!]!
+}
+
+type ConsolidationJournalType {
+  associatedConsolidationAccountingUnits: [ConsolidationAccountingUnit!]!
+  bsConsolidationJournalSummary(consolidationAccountingUnitId: ID!): ConsolidationJournalSummaryType!
+  consolidationJournalOperationHistory(consolidationAccountingUnitId: ID!): [ConsolidationJournalOperationHistory!]!
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  openingJournalType: OpeningJournalType!
+  plConsolidationJournalSummary(consolidationAccountingUnitId: ID!): ConsolidationJournalSummaryType!
+  remarks: String
+  sortOrder: Int!
+  tenantUid: ID!
+  updatedAt: DateTime!
+}
+
+type ConsolidationPackage {
+  balanceSheet: BalanceSheet
+  company: Company!
+  consolidationPackageOperationHistories: [ConsolidationPackageOperationHistory!]!
+  consolidationProcess: ConsolidationProcessType!
+  createdAt: DateTime!
+  id: ID!
+  importingConsolidationPackageJob: ConsolidationPackageImportJob
+  isUsedConPkg: Boolean!
+  isUsedConacJournal: Boolean!
+  latestUpdatedAt: DateTime!
+  profitAndLoss: ProfitAndLoss
+  segmentStructure: ConsolidationPackageSegmentStructure!
+  sortOrder: Int!
+  submissionRequired: Boolean!
+  trialBalance: TrialBalance
+}
+
+type ConsolidationPackageImportFromCaJob implements ConsolidationPackageImportJob {
+  jobType: ConsolidationPackageImportJobType!
+  resource: CaIntegrationResource!
+  serviceName: String!
+}
+
+type ConsolidationPackageImportFromCamidJob implements ConsolidationPackageImportJob {
+  jobType: ConsolidationPackageImportJobType!
+  resource: CamidIntegrationResource!
+  serviceName: String!
+}
+
+type ConsolidationPackageImportFromExcelJob implements ConsolidationPackageImportJob {
+  excelFileName: String!
+  jobType: ConsolidationPackageImportJobType!
+}
+
+type ConsolidationPackageImportSetting {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  operatedAt: DateTime!
+  tenantUid: ID!
+  trialBalanceImportSettings: [TrialBalanceImportSetting!]!
+}
+
+type ConsolidationPackageImportStatusesNotification {
+  consolidationAccountingUnitId: ID!
+  status: JobStatus!
+}
+
+type ConsolidationPackageResetOperationHistory implements ConsolidationPackageOperationHistory {
+  createdAt: DateTime!
+  historyType: ConsolidationPackageHistoryType!
+  id: ID!
+  officeMemberName: String
+  resetBalanceAdjustment: Boolean!
+  resetConsolidationPackage: Boolean!
+  resetTranslationAdjustment: Boolean!
+}
+
+type ConsolidationPackageSegmentStructure {
+  lastModifiedAt: DateTime!
+  rows: [ConsolidationPackageSegmentStructureRow!]!
+}
+
+type ConsolidationPackageSegmentStructureRow {
+  segment: Segment!
+  segmentIdentificationKeys: [String!]!
+  sortOrder: Int!
+}
+
+type CreateAccountConversionRulePreviewPayload {
+  accountConversionRulePreviews: [AccountConversionRulePreview!]!
+  errors: TrialBalancePreviewErrors
+  uploadedFileId: ID!
+}
+
+type CreateCompanyMasterCsvExportUrlMutationPayload {
+  downloadUrl: String!
+}
+
+type CreateCompanyMutationPayload {
+  clientMutationId: String
+  company: Company
+  userErrors: [UserError!]!
+}
+
+type CreateConsolidatedAccountCsvExportUrlMutationPayload {
+  downloadUrl: String!
+}
+
+type CreateConsolidatedAccountMutationPayload {
+  clientMutationId: String
+  consolidatedAccount: ConsolidatedAccount
+  userErrors: [UserError!]!
+}
+
+type CreateConsolidationAccountingUnitMutationPayload {
+  clientMutationId: String
+  consolidationAccountingUnit: ConsolidationAccountingUnit
+  userErrors: [UserError!]!
+}
+
+type CreateConsolidationJournalCsvExportUrlMutationPayload {
+  downloadUrl: String!
+}
+
+type CreateConsolidationJournalImportFileDownloadUrlMutationPayload {
+  clientMutationId: String
+  url: String!
+}
+
+type CreateConsolidationJournalImportFileUploadUrlMutationPayLoad {
+  clientMutationId: String
+  key: String!
+  url: String!
+}
+
+type CreateConsolidationJournalPreviewMutationPayload {
+  clientMutationId: String
+  error: String
+  previews: [ConsolidationJournalPreview!]!
+  uploadedFileId: ID!
+}
+
+type CreateConsolidationJournalTypeMutationPayload {
+  clientMutationId: String
+  consolidationJournalType: ConsolidationJournalType
+  userErrors: [UserError!]!
+}
+
+type CreateConsolidationPackageImportFileUploadUrlMutationPayload {
+  clientMutationId: String
+  key: String!
+  url: String!
+}
+
+type CreateConsolidationPackageImportSettingMutationPayload {
+  clientMutationId: String
+  consolidationPackageImportSetting: ConsolidationPackageImportSetting
+  userErrors: [UserError!]!
+}
+
+type CreateConsolidationWorksheetCsvExportUrlMutationPayload {
+  downloadUrl: String!
+}
+
+type CreateOfficeMemberMutationPayload {
+  clientMutationId: String
+  officeMember: OfficeMember!
+}
+
+type CreateOfficeMutationPayload {
+  clientMutationId: String
+}
+
+type CreateSegmentMutationPayload {
+  clientMutationId: String
+  segment: Segment
+  userErrors: [UserError!]!
+}
+
+type CreateTimeLimitedDownloadUrlMutationPayload {
+  downloadUrl: String!
+}
+
+type CreateWorkClassificationMutationPayload {
+  clientMutationId: String
+  userErrors: [UserError!]!
+  workClassification: WorkClassification
+}
+
+type DeleteCaIntegrationSettingMutationPayload {
+  clientMutationId: String
+}
+
+type DeleteCamidIntegrationSettingMutationPayload {
+  clientMutationId: String
+}
+
+type DeleteCompanyMutationPayload {
+  clientMutationId: String
+}
+
+type DeleteConsolidatedAccountMutationPayload {
+  clientMutationId: String
+}
+
+type DeleteConsolidationJournalRowsMutationPayload {
+  clientMutationId: String
+}
+
+type DeleteConsolidationJournalTypeMutationPayLoad {
+  clientMutationId: String
+}
+
+type DeleteConsolidationPackageImportSettingPayload {
+  clientMutationId: String
+}
+
+type DeleteOfficeMemberMutationPayload {
+  clientMutationId: String
+}
+
+type DeleteWorkClassificationMutationPayload {
+  clientMutationId: String
+}
+
+type DifferenceAmountPerCompany {
+  amount: Float!
+  company: Company!
+}
+
+type ErrorsPerAssignedConsolidatedAccount {
+  errors: [CarryForwardPerAssignedConsolidatedAccountError!]!
+  previousAssignedConsolidatedAccount: AssignedConsolidatedAccount!
+}
+
+type ErrorsPerConsolidationPackage {
+  errors: [CarryForwardPerCompanyError!]!
+  previousConsolidationPackage: ConsolidationPackage!
+}
+
+type ExcelRowErrorPositionType {
+  column: String!
+  rows: [String!]!
+}
+
+type ExchangeRate {
+  averageRate: Float!
+  company: Company!
+  companyId: ID!
+  consolidationAccountingUnitId: ID!
+  currentRate: Float!
+  id: ID!
+  tenantUid: ID!
+  updatedAt: DateTime!
+}
+
+type ExcludedInCurrentConsolidationProcess {
+  company: Company!
+}
+
+type ExcludedInCurrentConsolidationProcessForTA {
+  company: Company!
+  items: [TranslationAdjustmentPreviewCurrentRowItem!]!
+}
+
+type ExportBalanceSheetBySubCategoryMutationPayload {
+  downloadUrl: String!
+}
+
+type ExportBalanceSheetMutationPayload {
+  downloadUrl: String!
+}
+
+type ExportPLSheetMutationPayload {
+  downloadUrl: String!
+}
+
+type ExportProfitLossSheetBySubCategoryMutationPayload {
+  downloadUrl: String!
+}
+
+type FSSummaryRow {
+  amount: Float!
+  subCategory: ConsolidatedAccountSubCategory!
+}
+
+type FeatureFlags {
+  isCarryForwardOpsHistoryEnabled: Boolean!
+  isCarryForwardTranslationAdjustmentEnabled: Boolean!
+  isExportBalanceAndProfitLossEnabled: Boolean!
+  isMultipleLanguagesEnabled: Boolean!
+  isSegmentWorksheetEnabled: Boolean!
+  isSortOrderCompanySegmentEnabled: Boolean!
+  isSsoEnabled: Boolean!
+  isViewerRoleEnabled: Boolean!
+}
+
+type FinancialStatementModificationOperationHistory implements ConsolidationPackageOperationHistory {
+  accountNamesEn: String
+  accountNamesJa: String!
+  consolidationPackageOperationTarget: ConsolidationPackageOperationTarget!
+  createdAt: DateTime!
+  financialStatementOperationTarget: FinancialStatementModificationOperationTarget!
+  historyType: ConsolidationPackageHistoryType!
+  id: ID!
+  officeMemberName: String
+}
+
+type FinancialStatementRow {
+  adjustedBalance: Float!
+  adjustedTranslatedBalance: Float
+  assignedConsolidatedAccount: AssignedConsolidatedAccount!
+  balance: Float!
+  id: ID
+  translatedBalance: Float!
+}
+
+type GenerateConsolidatedAccountFileUploadUrlMutationPayload {
+  clientMutationId: String
+  key: String!
+  url: String!
+}
+
+type ImportConsolidatedAccountMutationPayload {
+  clientMutationId: String
+}
+
+type ImportConsolidationJournalsMutationPayload {
+  clientMutationId: String
+}
+
+type ImportConsolidationPackageFromExternalServiceMutationPayload {
+  clientMutationId: String
+}
+
+type ImportConsolidationPackageMutationPayload {
+  clientMutationId: String
+  userErrors: [UserError!]!
+}
+
+type IncludedInCurrentConsolidationProcess {
+  amount: Float!
+  consolidationPackage: ConsolidationPackage!
+}
+
+type IncludedInCurrentConsolidationProcessForTA {
+  consolidationPackage: ConsolidationPackage!
+  items: [TranslationAdjustmentPreviewCurrentRowItem!]!
+}
+
+type IntegrationService {
+  name: String!
+  type: IntegrationServiceType!
+}
+
+type JobNotification {
+  jobId: String!
+  status: JobStatus!
+  type: JobStatusMessageType!
+}
+
+type JournalGroupKeyPreview {
+  errors: [JournalGroupKeyPreviewError!]!
+  value: String!
+}
+
+type JournalGroupKeyPreviewError {
+  error: JournalGroupKeyError!
+  message: String!
+}
+
+type LoginOffice {
+  identificationCode: String!
+  isUnderContract: Boolean!
+  name: String!
+  tenantUid: ID!
+}
+
+type LoginOfficeMutationPayload {
+  clientMutationId: String
+}
+
+type LoginOfficeSsoMutationPayload {
+  hasPermission: Boolean!
+}
+
+type Mutation {
+  "Build a ca account conversion rule preview"
+  buildCaAccountConversionRulePreview(input: BuildCaAccountConversionRulePreviewMutationInput!): BuildCaAccountConversionRulePreviewMutationPayload!
+  "Build a camid account conversion rule preview"
+  buildCamidAccountConversionRulePreview(input: BuildCamidAccountConversionRulePreviewMutationInput!): BuildCamidAccountConversionRulePreviewMutationPayload!
+  buildConsolidatedAccountsPreview(input: BuildConsolidatedAccountsPreviewMutationInput!): BuildConsolidatedAccountsPreviewMutationPayload!
+  "Carry retained earnings and HR accounts forward, and execute opening journal entry"
+  carryForward(input: CarryForwardInput!): CarryForwardPayload!
+  createAccountConversionRulePreview(input: CreateAccountConversionRulePreviewInput!): CreateAccountConversionRulePreviewPayload!
+  "Create company"
+  createCompany(input: CreateCompanyMutationInput!): CreateCompanyMutationPayload!
+  "Generate company master csv file url"
+  createCompanyMasterCsvExportUrl: CreateCompanyMasterCsvExportUrlMutationPayload!
+  "Create a consolidated account"
+  createConsolidatedAccount(input: CreateConsolidatedAccountMutationInput!): CreateConsolidatedAccountMutationPayload!
+  "Generate consolidated account master csv file url"
+  createConsolidatedAccountCsvExportUrl: CreateConsolidatedAccountCsvExportUrlMutationPayload!
+  "Create a consolidation accounting unit"
+  createConsolidationAccountingUnit(input: CreateConsolidationAccountingUnitMutationInput!): CreateConsolidationAccountingUnitMutationPayload!
+  "Generate a url for a CSV file of consolidated journal entries data"
+  createConsolidationJournalCsvExportUrl(input: CreateConsolidationJournalCsvExportUrlMutationInput!): CreateConsolidationJournalCsvExportUrlMutationPayload!
+  createConsolidationJournalImportFileDownloadUrl(input: CreateConsolidationJournalImportFileDownloadUrlMutationInput!): CreateConsolidationJournalImportFileDownloadUrlMutationPayload!
+  "Retrieve upload url for uploading consolidation journal excel file"
+  createConsolidationJournalImportFileUploadUrl(input: CreateConsolidationJournalImportFileUploadUrlMutationInput!): CreateConsolidationJournalImportFileUploadUrlMutationPayLoad!
+  "Generate Preview of ConsolidationJournal, or ConsolidationJournalPreview entity"
+  createConsolidationJournalPreview(input: CreateConsolidationJournalPreviewMutationInput!): CreateConsolidationJournalPreviewMutationPayload!
+  "Create a ConsolidationJournalType"
+  createConsolidationJournalType(input: CreateConsolidationJournalTypeMutationInput!): CreateConsolidationJournalTypeMutationPayload!
+  "Create url for uploading file of consolidation package import"
+  createConsolidationPackageImportFileUploadUrl(input: CreateConsolidationPackageImportFileUploadUrlMutationInput!): CreateConsolidationPackageImportFileUploadUrlMutationPayload!
+  "Create a consolidation package import setting"
+  createConsolidationPackageImportSetting(input: CreateConsolidationPackageImportSettingMutationInput!): CreateConsolidationPackageImportSettingMutationPayload!
+  "Generate CSV export URL by current consolidationAccountingUnitId and tenantUid"
+  createConsolidationWorksheetCsvExportUrl(input: CreateConsolidationWorksheetCsvExportUrlMutationInput!): CreateConsolidationWorksheetCsvExportUrlMutationPayload!
+  "Create office"
+  createOffice(input: CreateOfficeMutationInput!): CreateOfficeMutationPayload!
+  "Create a office member"
+  createOfficeMember(input: CreateOfficeMemberMutationInput!): CreateOfficeMemberMutationPayload!
+  "Create segment"
+  createSegment(input: CreateSegmentMutationInput!): CreateSegmentMutationPayload!
+  "Generate time limited download URL of uploaded file"
+  createTimeLimitedDownloadUrl(input: CreateTimeLimitedDownloadUrlMutationInput!): CreateTimeLimitedDownloadUrlMutationPayload!
+  "Create workClassification"
+  createWorkClassification(input: CreateWorkClassificationMutationInput!): CreateWorkClassificationMutationPayload!
+  "Delete ca integration setting"
+  deleteCaIntegrationSetting(input: DeleteCaIntegrationSettingMutationInput!): DeleteCaIntegrationSettingMutationPayload!
+  "Delete camid integration setting"
+  deleteCamidIntegrationSetting(input: DeleteCamidIntegrationSettingMutationInput!): DeleteCamidIntegrationSettingMutationPayload!
+  "Delete company"
+  deleteCompany(input: DeleteCompanyMutationInput!): DeleteCompanyMutationPayload!
+  "Delete consolidated account"
+  deleteConsolidatedAccount(input: DeleteConsolidatedAccountMutationInput!): DeleteConsolidatedAccountMutationPayload!
+  "Delete ConsolidationJournalRows only CURRENT data"
+  deleteConsolidationJournalRows(input: DeleteConsolidationJournalRowsMutationInput!): DeleteConsolidationJournalRowsMutationPayload!
+  "Delete ConsolidationJournalType"
+  deleteConsolidationJournalType(input: DeleteConsolidationJournalTypeMutationInput!): DeleteConsolidationJournalTypeMutationPayLoad!
+  deleteConsolidationPackageImportSetting(input: DeleteConsolidationPackageImportSettingInput!): DeleteConsolidationPackageImportSettingPayload!
+  deleteOfficeMember(input: DeleteOfficeMemberMutationInput!): DeleteOfficeMemberMutationPayload!
+  "Delete work classification"
+  deleteWorkClassification(input: DeleteWorkClassificationMutationInput!): DeleteWorkClassificationMutationPayload!
+  exportBSBySubCategory(input: ExportBalanceSheetBySubCategoryMutationInput!): ExportBalanceSheetBySubCategoryMutationPayload!
+  exportBalanceSheet(input: ExportBalanceSheetMutationInput!): ExportBalanceSheetMutationPayload!
+  exportPLSheet(input: ExportPLSheetMutationInput!): ExportPLSheetMutationPayload!
+  exportPLSheetBySubCategory(input: ExportProfitLossSheetBySubCategoryMutationInput!): ExportProfitLossSheetBySubCategoryMutationPayload!
+  generateConsolidatedAccountFileUploadUrl(input: GenerateConsolidatedAccountFileUploadUrlMutationInput!): GenerateConsolidatedAccountFileUploadUrlMutationPayload!
+  importConsolidatedAccount(input: ImportConsolidatedAccountMutationInput!): ImportConsolidatedAccountMutationPayload!
+  "Import consolidation journals from front end request data"
+  importConsolidationJournals(input: ImportConsolidationJournalsMutationInput!): ImportConsolidationJournalsMutationPayload!
+  "Create a new consolidation package import job"
+  importConsolidationPackage(input: ImportConsolidationPackageMutationInput!): ImportConsolidationPackageMutationPayload!
+  "Import consolidation package from external service"
+  importConsolidationPackageFromExternalService(input: ImportConsolidationPackageFromExternalServiceMutationInput!): ImportConsolidationPackageFromExternalServiceMutationPayload!
+  "Login office"
+  loginOffice(input: LoginOfficeMutationInput!): LoginOfficeMutationPayload!
+  "Login office when sso"
+  loginOfficeSso(input: LoginOfficeSsoMutationInput!): LoginOfficeSsoMutationPayload!
+  resetCarryForward(input: ResetCarryForwardMutationInput!): ResetCarryForwardMutationPayload!
+  resetConsolidationPackage(input: ResetConsolidationPackageMutationInput!): ResetConsolidationPackageMutationPayload!
+  updateAccountConversionRule(input: UpdateAccountConversionRuleMutationInput!): UpdateAccountConversionRuleMutationPayload!
+  "Update AssignedConsolidatedAccounts"
+  updateAssignedConsolidatedAccounts(input: UpdateAssignedConsolidatedAccountsMutationInput!): UpdateAssignedConsolidatedAccountsMutationPayLoad!
+  "Update translation adjustments of balance sheet"
+  updateBSTranslationAdjustments(input: UpdateBSTranslationAdjustmentsMutationInput!): UpdateBSTranslationAdjustmentsMutationPayload!
+  updateBsBalanceAdjustment(input: UpdateBsBalanceAdjustmentsMutationInput!): UpdateBsBalanceAdjustmentsMutationPayload!
+  "Update company"
+  updateCompany(input: UpdateCompanyMutationInput!): UpdateCompanyMutationPayload!
+  updateCompanySortOrder(input: UpdateCompanySortOrderMutationInput!): UpdateCompanySortOrderMutationPayload!
+  updateConsolidatedAccount(input: UpdateConsolidatedAccountMutationInput!): UpdateConsolidatedAccountMutationPayload!
+  "Update a consolidation accounting unit"
+  updateConsolidationAccountingUnit(input: UpdateConsolidationAccountingUnitMutationInput!): UpdateConsolidationAccountingUnitMutationPayload!
+  "Update a lock status of consolidation accounting unit"
+  updateConsolidationAccountingUnitLockStatus(input: UpdateConsolidationAccountingUnitLockStatusMutationInput!): UpdateConsolidationAccountingUnitLockStatusMutationPayload!
+  "Update a ConsolidationJournalType"
+  updateConsolidationJournalType(input: UpdateConsolidationJournalTypeMutationInput!): UpdateConsolidationJournalTypeMutationPayload!
+  "Update ConsolidationJournalType sortOrder"
+  updateConsolidationJournalTypeSortOrder(input: UpdateConsolidationJournalTypeSortOrderMutationInput!): UpdateConsolidationJournalTypeSortOrderMutationPayload!
+  "Update a consolidation package import setting"
+  updateConsolidationPackageImportSetting(input: UpdateConsolidationPackageImportSettingMutationInput!): UpdateConsolidationPackageImportSettingMutationPayload!
+  "Update exchange rates"
+  updateExchangeRates(input: UpdateExchangeRatesMutationInput!): UpdateExchangeRatesMutationPayload!
+  updateOfficeMember(input: UpdateOfficeMemberMutationInput!): UpdateOfficeMemberMutationPayload!
+  "Update or create consolidation journal import setting"
+  updateOrCreateConsolidationJournalImportSetting(input: UpdateOrCreateConsolidationJournalImportSettingMutationInput!): UpdateOrCreateConsolidationJournalImportSettingMutationPayLoad!
+  "Update translation adjustments of profit and loss"
+  updatePLTranslationAdjustments(input: UpdatePLTranslationAdjustmentsMutationInput!): UpdatePLTranslationAdjustmentsMutationPayload!
+  updatePlBalanceAdjustment(input: UpdatePlBalanceAdjustmentsMutationInput!): UpdatePlBalanceAdjustmentsMutationPayload!
+  "Update reserved consolidated accounts"
+  updateReservedConsolidatedAccounts(input: UpdateReservedConsolidatedAccountsMutationInput!): UpdateReservedConsolidatedAccountsMutationPayload!
+  "Update segment"
+  updateSegment(input: UpdateSegmentMutationInput!): UpdateSegmentMutationPayload!
+  "Update Segment sortOrder"
+  updateSegmentSortOrder(input: UpdateSegmentSortOrderMutationInput!): UpdateSegmentSortOrderMutationPayload!
+  "Update user language"
+  updateUserLanguage(input: UpdateUserStatusMutationInput!): UpdateUserStatusMutationPayload!
+  "Update user status"
+  updateUserStatus(input: UpdateUserStatusMutationInput!): UpdateUserStatusMutationPayload!
+  "Update workClassification"
+  updateWorkClassification(input: UpdateWorkClassificationMutationInput!): UpdateWorkClassificationMutationPayload!
+  upsertConsolidatedAccountImportSetting(input: UpsertConsolidatedAccountImportSettingMutationInput!): UpsertConsolidatedAccountImportSettingMutationPayload!
+}
+
+type Office {
+  companies: [Company!]!
+  company(id: ID!): Company!
+  conacUnitOperationHistories: [ConsolidationAccountingUnitOperationHistory!]!
+  consolidatedAccount(id: ID!): ConsolidatedAccount!
+  consolidatedAccountImportSetting: ConsolidatedAccountImportSetting
+  consolidatedAccountSubCategories: [ConsolidatedAccountSubCategory!]!
+  consolidatedAccounts: [ConsolidatedAccount!]!
+  consolidationAccountingUnit(id: ID!): ConsolidationAccountingUnit!
+  consolidationAccountingUnits: [ConsolidationAccountingUnit!]!
+  consolidationCurrency: Currency!
+  consolidationJournalType(id: ID!): ConsolidationJournalType!
+  consolidationJournalTypes: [ConsolidationJournalType!]!
+  consolidationPackageImportSetting(id: ID!): ConsolidationPackageImportSetting!
+  consolidationPackageImportSettings: [ConsolidationPackageImportSetting!]!
+  featureFlags: FeatureFlags!
+  identificationCode: String!
+  "integration setting list for external services"
+  integrationSettings: [IntegrationSetting!]!
+  isUpdatableReservedConsolidatedAccounts: Boolean!
+  name: String!
+  officeMember(officeMemberId: ID!): OfficeMember!
+  officeMembers: [OfficeMember!]!
+  roles: [Role!]!
+  segment(segmentId: ID!): Segment!
+  segments: [Segment!]!
+  tenantUid: ID!
+  toBeReservedConsolidatedAccounts: ToBeReservedConsolidatedAccounts!
+  unregisteredTenantUsers: [TenantUser!]!
+  workClassification(id: ID!): WorkClassificationDetailType!
+  workClassifications: [WorkClassification!]!
+}
+
+type OfficeMember {
+  description: String
+  email: String!
+  id: ID!
+  name: String!
+  roles: [Role!]!
+  undeletableReason: OfficeMemberUndeletableReason
+}
+
+type OfficeMemberUpdateError {
+  error: OfficeMemberError!
+  message: String!
+}
+
+type PLConsolidationWorksheetBalance {
+  consolidationAccountingUnitId: ID!
+  rows: [PLConsolidationWorksheetBalanceRow!]!
+  summary: PLSummary!
+}
+
+type PLConsolidationWorksheetBalanceRow {
+  adjustedBalance: Float!
+  adjustmentBalance: Float!
+  assignedConsolidatedAccount: AssignedConsolidatedAccount!
+  totalBalance: Float!
+}
+
+type PLSummary {
+  grossProfitAmount: Float!
+  grossProfitItems: [FSSummaryRow!]!
+  operatingProfitAmount: Float!
+  operatingProfitItems: [FSSummaryRow!]!
+  ordinaryProfitAmount: Float!
+  ordinaryProfitItems: [FSSummaryRow!]!
+  profitAttributableToOwnersOfParentAmount: Float!
+  profitAttributableToOwnersOfParentItems: [FSSummaryRow!]!
+  profitBeforeIncomeTaxesAmount: Float!
+  profitBeforeIncomeTaxesItems: [FSSummaryRow!]!
+}
+
+type PLTranslationAdjustment {
+  afterTranslationBalance: Float!
+  assignedConsolidatedAccountId: ID!
+  beforeTranslationBalance: Float
+  financialStatementId: ID!
+  id: ID!
+  openingClassification: OpeningClassification!
+  remark: String
+  tenantUid: ID!
+}
+
+type Permission {
+  companyId: ID
+  function: PermissionFunction!
+  id: ID!
+  roleId: ID!
+  tenantUid: ID!
+}
+
+type PreviousAmountPerConsolidationPackage {
+  amount: Float!
+  consolidationPackage: ConsolidationPackage!
+}
+
+type ProfitAndLoss {
+  adjustedSummary: PLSummary!
+  balanceAdjustments: [BalanceAdjustment!]!
+  id: ID!
+  rows: [FinancialStatementRow!]!
+  translatedSummary: PLSummary!
+  translationAdjustments: [PLTranslationAdjustment!]!
+}
+
+type Query {
+  "fetch account conversion rule recommendation"
+  accountConversionRuleRecommendation(input: AccountConversionRuleRecommendationQueryInput!): AccountConversionRuleRecommendation!
+  "fetch consolidation accounting unit"
+  consolidationAccountingUnit(consolidationAccountingUnitId: ID!): ConsolidationAccountingUnit!
+  currentUserPermissions: [Permission!]!
+  "fetch offices for tenants select page"
+  loginOffices: [LoginOffice!]!
+  "fetch office"
+  office: Office!
+  "fetch offices"
+  offices: [Office!]!
+  "fetch URL for tenant registration"
+  tenantRegistrationUrl: TenantRegistrationUrlType!
+  "fetch tenant users"
+  tenantUsers: [TenantUser!]!
+  "fetch tenants"
+  tenants: [Tenant!]!
+  "User's current state."
+  userStatus: UserStatus!
+}
+
+type RemarkPreview {
+  errors: [RemarkPreviewError!]!
+  value: String!
+}
+
+type RemarkPreviewError {
+  error: RemarkError!
+  message: String!
+}
+
+type ResetCarryForwardMutationPayload {
+  subscriptionId: String!
+}
+
+type ResetConsolidationPackageMutationPayload {
+  clientMutationId: String
+}
+
+type RetainedEarningsBroughtForwardPreview {
+  diff: RetainedEarningsDifference!
+  prevRetainedEarningsSummary: RetainedEarningsSummary!
+  retainedEarningsBroughtForward: RetainedEarningsBroughtForwardRow!
+  rows: [RetainedEarningsPreviewRow!]!
+  warnings: [RetainedEarningsPreviewWarning!]!
+}
+
+type RetainedEarningsBroughtForwardRow {
+  adjustedBalance: Float!
+  adjustmentBalance: Float!
+  amountPerCompany: [CurrentAmountPerCompany!]!
+  amountPerConsolidationJournal: [AmountPerConsolidationJournalType!]!
+  assignedConsolidatedAccount: AssignedConsolidatedAccount!
+  totalBalance: Float!
+}
+
+type RetainedEarningsDifference {
+  adjustedBalance: Float!
+  adjustmentBalance: Float!
+  amountPerCompany: [DifferenceAmountPerCompany!]!
+  amountPerConsolidationJournal: [AmountPerConsolidationJournalType!]!
+  totalBalance: Float!
+}
+
+type RetainedEarningsPreviewRow {
+  adjustedBalance: Float!
+  adjustmentBalance: Float!
+  amountPerConsolidationJournal: [AmountPerConsolidationJournalType!]!
+  amountPerConsolidationPackage: [PreviousAmountPerConsolidationPackage!]!
+  assignedConsolidatedAccount: AssignedConsolidatedAccount!
+  totalBalance: Float!
+}
+
+type RetainedEarningsSummary {
+  adjustedBalance: Float!
+  adjustmentBalance: Float!
+  amountPerConsolidationJournal: [AmountPerConsolidationJournalType!]!
+  amountPerConsolidationPackage: [PreviousAmountPerConsolidationPackage!]!
+  totalBalance: Float!
+}
+
+type Role {
+  associatedOfficeMembers: [OfficeMember!]!
+  id: ID!
+  isUserManagement: Boolean!
+  nameJa: String!
+}
+
+type Segment {
+  abbreviation: String!
+  description: String
+  id: ID!
+  nameEn: String
+  nameJa: String!
+  sortOrder: Int!
+  tenantUid: ID!
+}
+
+type SegmentAbbreviationPreview {
+  errors: [SegmentAbbreviationPreviewError!]!
+  segmentId: ID
+  value: String!
+}
+
+type SegmentAbbreviationPreviewError {
+  error: SegmentAbbreviationError!
+  message: String!
+}
+
+type Subscription {
+  "Subscribe carry forward execution status"
+  carryForwardExecutingStatus(input: CarryForwardExecutingStatusSubscriptionInput!): CarryForwardExecutingStatusNotification!
+  "Subscribe consolidation package import statuses"
+  consolidationPackageImportStatuses(input: ConsolidationPackageImportStatusesSubscriptionInput!): ConsolidationPackageImportStatusesNotification!
+  "Subscribe job status"
+  jobStatusByJobId(input: JobSubscriptionInput!): JobNotification!
+  "This is sample Subscription"
+  subscribeToAllEvents: JobNotification!
+  trialBalanceImportStatus(input: TrialBalanceImportStatusSubscriptionInput!): TrialBalanceImportStatusNotification!
+}
+
+type Tenant {
+  id: ID!
+  identificationCode: String!
+  isCreatable: Boolean!
+  isUnderContract: Boolean!
+  name: String!
+  tenantUsers: [TenantUser!]!
+}
+
+type TenantRegistrationUrlType {
+  url: String!
+}
+
+type TenantUser {
+  email: String!
+  id: ID!
+  name: String!
+}
+
+type ToBeReservedConsolidatedAccounts {
+  foreignCurrencyTranslationAdjustmentAccounts: [ConsolidatedAccount!]!
+  foreignExchangeLossesNoeAccounts: [ConsolidatedAccount!]!
+  profitBSAccounts: [ConsolidatedAccount!]!
+  retainedEarningsBroughtForwardAccounts: [ConsolidatedAccount!]!
+}
+
+type TranslationAdjustmentPreview {
+  currentRows: [TranslationAdjustmentPreviewCurrentRow!]!
+  diffs: [TranslationAdjustmentPreviewDifference!]!
+  prevRows: [TranslationAdjustmentPreviewPrevRow!]!
+  warnings: [TranslationAdjustmentPreviewWarning!]!
+}
+
+type TranslationAdjustmentPreviewCurrentRowItem {
+  adjustedTranslatedBalance: Float
+  consolidatedAccount: ConsolidatedAccount!
+}
+
+type TranslationAdjustmentPreviewDifference {
+  amountPerConsolidatedAccount: [AmountPerConsolidatedAccount!]!
+  company: Company!
+}
+
+type TranslationAdjustmentPreviewPrevRow {
+  consolidationPackage: ConsolidationPackage!
+  items: [TranslationAdjustmentPreviewPrevRowItem!]!
+}
+
+type TranslationAdjustmentPreviewPrevRowItem {
+  adjustedTranslatedBalance: Float!
+  assignedConsolidatedAccount: AssignedConsolidatedAccount!
+}
+
+type TrialBalance {
+  rows: [TrialBalanceRow!]!
+}
+
+type TrialBalanceImportFromCaOperationHistory implements ConsolidationPackageOperationHistory {
+  beforeConversionTbFileId: ID!
+  consolidationPackageOperationTarget: ConsolidationPackageOperationTarget!
+  conversionRuleFileId: ID!
+  createdAt: DateTime!
+  historyType: ConsolidationPackageHistoryType!
+  id: ID!
+  officeMemberName: String
+}
+
+type TrialBalanceImportFromCamidOperationHistory implements ConsolidationPackageOperationHistory {
+  consolidationPackageOperationTarget: ConsolidationPackageOperationTarget!
+  conversionRuleFileId: ID!
+  createdAt: DateTime!
+  historyType: ConsolidationPackageHistoryType!
+  id: ID!
+  officeMemberName: String
+  rawResponseFileId: ID!
+}
+
+type TrialBalanceImportOperationHistory implements ConsolidationPackageOperationHistory {
+  consolidationPackageOperationTarget: ConsolidationPackageOperationTarget!
+  conversionRuleFileId: ID!
+  createdAt: DateTime!
+  historyType: ConsolidationPackageHistoryType!
+  id: ID!
+  officeMemberName: String
+  rawExcelFileId: ID!
+  rawExcelFileName: String!
+}
+
+type TrialBalanceImportSetting {
+  accountCodeColumn: String!
+  accountNameColumn: String!
+  balanceColumn: String!
+  endRow: Int!
+  id: ID!
+  sheetName: String!
+  startRow: Int!
+}
+
+type TrialBalanceImportStatusNotification {
+  consolidationPackageId: ID!
+  status: JobStatus!
+}
+
+type TrialBalancePreviewBeforeConversionRowType {
+  accountCode: String!
+  accountName: String!
+  balance: Float!
+}
+
+type TrialBalancePreviewErrors {
+  rowErrors: [TrialBalancePreviewRowError!]!
+  sheetErrors: [TrialBalancePreviewSheetError!]!
+}
+
+type TrialBalancePreviewRowError {
+  id: ID!
+  message: String!
+  sheets: [TrialBalancePreviewRowErrorSheet!]!
+}
+
+type TrialBalancePreviewRowErrorSheet {
+  positions: [ExcelRowErrorPositionType!]!
+  sheetName: String!
+}
+
+type TrialBalancePreviewSheetError {
+  id: ID!
+  message: String!
+  sheetNames: [String!]!
+}
+
+type TrialBalanceRow {
+  accountCode: String
+  accountName: String
+  assignedConsolidatedAccount: AssignedConsolidatedAccount
+  balance: Float
+  id: ID!
+  importStatus: ImportStatus!
+  importedBalance: Float
+}
+
+type UpdateAccountConversionRuleMutationPayload {
+  clientMutationId: String
+}
+
+type UpdateAssignedConsolidatedAccountsMutationPayLoad {
+  clientMutationId: String
+}
+
+type UpdateBSTranslationAdjustmentsMutationPayload {
+  clientMutationId: String
+  userErrors: [UserError!]!
+}
+
+type UpdateBsBalanceAdjustmentsMutationPayload {
+  clientMutationId: String
+}
+
+type UpdateCompanyMutationPayload {
+  clientMutationId: String
+  company: Company
+  userErrors: [UserError!]!
+}
+
+type UpdateCompanySortOrderMutationPayload {
+  clientMutationId: String
+}
+
+type UpdateConsolidatedAccountMutationPayload {
+  clientMutationId: String
+  consolidatedAccount: ConsolidatedAccount
+  userErrors: [UserError!]!
+}
+
+type UpdateConsolidationAccountingUnitLockStatusMutationPayload {
+  clientMutationId: String
+  consolidationAccountingUnit: ConsolidationAccountingUnit!
+}
+
+type UpdateConsolidationAccountingUnitMutationPayload {
+  clientMutationId: String
+  consolidationAccountingUnit: ConsolidationAccountingUnit
+  userErrors: [UserError!]!
+}
+
+type UpdateConsolidationJournalTypeMutationPayload {
+  clientMutationId: String
+  consolidationJournalType: ConsolidationJournalType
+  userErrors: [UserError!]!
+}
+
+type UpdateConsolidationJournalTypeSortOrderMutationPayload {
+  clientMutationId: String
+}
+
+type UpdateConsolidationPackageImportSettingMutationPayload {
+  clientMutationId: String
+  consolidationPackageImportSetting: ConsolidationPackageImportSetting
+  userErrors: [UserError!]!
+}
+
+type UpdateExchangeRatesMutationPayload {
+  clientMutationId: String
+}
+
+type UpdateOfficeMemberMutationPayload {
+  clientMutationId: String
+  errors: [OfficeMemberUpdateError!]!
+  officeMember: OfficeMember
+}
+
+type UpdateOrCreateConsolidationJournalImportSettingMutationPayLoad {
+  clientMutationId: String
+  consolidationJournalImportSetting: ConsolidationJournalImportSetting!
+}
+
+type UpdatePLTranslationAdjustmentsMutationPayload {
+  clientMutationId: String
+  userErrors: [UserError!]!
+}
+
+type UpdatePlBalanceAdjustmentsMutationPayload {
+  clientMutationId: String
+}
+
+type UpdateReservedConsolidatedAccountsMutationPayload {
+  clientMutationId: String
+  reservedConsolidatedAccountsError: ReservedConsolidatedAccountsError
+  updatedReservedConsolidatedAccounts: [ConsolidatedAccount!]!
+}
+
+type UpdateSegmentMutationPayload {
+  clientMutationId: String
+  segment: Segment
+  userErrors: [UserError!]!
+}
+
+type UpdateSegmentSortOrderMutationPayload {
+  clientMutationId: String
+}
+
+type UpdateUserStatusMutationPayload {
+  clientMutationId: String
+}
+
+type UpdateWorkClassificationMutationPayload {
+  clientMutationId: String
+  userErrors: [UserError!]!
+  workClassification: WorkClassification
+}
+
+type UploadedFile {
+  fileName: String!
+  id: ID!
+  tenantUid: ID!
+}
+
+type UpsertConsolidatedAccountImportSettingMutationPayload {
+  clientMutationId: String
+  consolidatedAccountImportSetting: ConsolidatedAccountImportSetting
+}
+
+type UserError {
+  field: [String!]!
+  message: String!
+}
+
+type UserStatus {
+  currentOffice: Office!
+  currentOfficeMember: OfficeMember!
+  language: UserLanguage
+  lastOperatedConsolidationAccountingUnit: ConsolidationAccountingUnit!
+  mfidIdentificationCode: String!
+}
+
+type WorkClassification {
+  code: WorkClassificationCode!
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  nameEn: String
+  nameJa: String!
+  updatedAt: DateTime!
+}
+
+type WorkClassificationCode {
+  code: String!
+}
+
+type WorkClassificationDetailType {
+  accountingUnitUseType: AccountingUnitUseType!
+  workClassification: WorkClassification!
+}
+
+type previewConsolidationJournal {
+  error: AccountCodeError!
+  message: String!
+}
+
+enum AccountCodeError {
+  ACCOUNT_CODE_REQUIRED
+  CORRESPONDING_ACCOUNT_NOT_FOUND
+  INVALID_FORMAT_ACCOUNT_CODE
+  PROFIT_BS_AND_RETAINED_EARNINGS_BROUGHT_FORWARD_CANNOT_BE_ASSIGNED
+  TOO_LONG_ACCOUNT_CODE
+}
+
+enum AccountSide {
+  CR
+  DR
+}
+
+enum AccountType {
+  FOREIGN_CURRENCY_TRANSLATION_ADJUSTMENT
+  FOREIGN_EXCHANGE_LOSSES_NOE
+  NORMAL
+  PROFIT_BS
+  RETAINED_EARNINGS_BROUGHT_FORWARD
+}
+
+enum AccountingUnitUseType {
+  SYSTEM_REQUIRED
+  UNUSED
+  USING
+}
+
+enum AmountType {
+  NEGATIVE
+  POSITIVE
+}
+
+enum BalanceError {
+  DECIMAL_VALUE
+  INVALID_FORMAT_BALANCE
+  NEGATIVE_VALUE
+  TOO_LONG_BALANCE
+}
+
+enum CaIntegrationResource {
+  TRIAL_BALANCE
+}
+
+enum CamidIntegrationResource {
+  TRIAL_BALANCE
+}
+
+enum CarryForwardInexecutableReasonType {
+  NO_PREV_CONSOLIDATION_ACCOUNTING_UNIT
+  PREVIOUS_CONSOLIDATION_ACCOUNTING_UNIT_IS_UNLOCKED
+}
+
+enum CarryForwardJobType {
+  CARRY_FORWARD
+  RESET
+}
+
+enum CompanyAbbreviationError {
+  COMPANY_ABBREVIATION_REQUIRED
+  CORRESPONDING_COMPANY_NOT_FOUND
+  CORRESPONDING_CONSOLIDATION_PACKAGE_NOT_INCLUDED
+  INVALID_FORMAT_COMPANY_ABBREVIATION
+  TOO_LONG_COMPANY_ABBREVIATION
+}
+
+enum CompanyRelatingDataType {
+  BALANCE_ADJUSTMENTS
+  CONSOLIDATION_JOURNALS
+  TRANSLATION_ADJUSTMENTS
+  TRIAL_BALANCES
+}
+
+enum ConsolidationAccountingUnitOperationType {
+  CREATE
+  LOCK
+  UNLOCK
+  UPDATE
+}
+
+enum ConsolidationJournalError {
+  NOT_BALANCED
+}
+
+enum ConsolidationJournalRowError {
+  EITHER_DEBIT_OR_CREDIT_SHOULD_BE_EMPTY
+}
+
+enum ConsolidationPackageHistoryType {
+  CONSOLIDATION_PACKAGE_RESET
+  FINANCIAL_STATEMENT_MODIFICATION
+  TRIAL_BALANCE_IMPORT
+  TRIAL_BALANCE_IMPORT_FROM_CA
+  TRIAL_BALANCE_IMPORT_FROM_CAMID
+}
+
+enum ConsolidationPackageImportJobType {
+  IMPORT_CONSOLIDATION_PACKAGE_FROM_CA
+  IMPORT_CONSOLIDATION_PACKAGE_FROM_CAMID
+  IMPORT_CONSOLIDATION_PACKAGE_FROM_EXCEL_FILE
+}
+
+enum ConsolidationPackageOperationTarget {
+  BS
+  PL
+  TB
+}
+
+enum ConsolidationProcessType {
+  INCLUDED
+  NOT_INCLUDED
+}
+
+enum ConversionRuleSkipReason {
+  NOT_REQUIRED
+  NOT_SET
+}
+
+enum ConversionType {
+  AR
+  CR
+  HR
+}
+
+enum Currency {
+  AED
+  AFN
+  ALL
+  AMD
+  ANG
+  AOA
+  ARS
+  AUD
+  AWG
+  AZN
+  BAM
+  BBD
+  BDT
+  BGN
+  BHD
+  BIF
+  BMD
+  BND
+  BOB
+  BOV
+  BRL
+  BSD
+  BTN
+  BWP
+  BYR
+  BZD
+  CAD
+  CDF
+  CHE
+  CHF
+  CHW
+  CLF
+  CLP
+  CNY
+  COP
+  COU
+  CRC
+  CUC
+  CUP
+  CVE
+  CZK
+  DJF
+  DKK
+  DOP
+  DZD
+  EGP
+  ERN
+  ETB
+  EUR
+  FJD
+  FKP
+  GBP
+  GEL
+  GHS
+  GIP
+  GMD
+  GNF
+  GTQ
+  GYD
+  HKD
+  HNL
+  HRK
+  HTG
+  HUF
+  IDR
+  ILS
+  INR
+  IQD
+  IRR
+  ISK
+  JMD
+  JOD
+  JPY
+  KES
+  KGS
+  KHR
+  KMF
+  KPW
+  KRW
+  KWD
+  KYD
+  KZT
+  LAK
+  LBP
+  LKR
+  LRD
+  LSL
+  LYD
+  MAD
+  MDL
+  MGA
+  MKD
+  MMK
+  MNT
+  MOP
+  MRU
+  MUR
+  MVR
+  MWK
+  MXN
+  MXV
+  MYR
+  MZN
+  NAD
+  NGN
+  NIO
+  NOK
+  NPR
+  NZD
+  OMR
+  PAB
+  PEN
+  PGK
+  PHP
+  PKR
+  PLN
+  PYG
+  QAR
+  RON
+  RSD
+  RUB
+  RWF
+  SAR
+  SBD
+  SCR
+  SDG
+  SEK
+  SGD
+  SHP
+  SLL
+  SOS
+  SRD
+  SSP
+  STN
+  SVC
+  SYP
+  SZL
+  THB
+  TJS
+  TMT
+  TND
+  TOP
+  TRY
+  TTD
+  TWD
+  TZS
+  UAH
+  UGX
+  USD
+  USN
+  UYI
+  UYU
+  UZS
+  VEF
+  VND
+  VUV
+  WST
+  XAF
+  XCD
+  XDR
+  XOF
+  XPF
+  XSU
+  XUA
+  YER
+  ZAR
+  ZMW
+  ZWL
+}
+
+enum FinancialStatementModificationOperationTarget {
+  ADJUSTMENT
+  REMARK
+  TRANSLATION_ADJUSTMENT
+}
+
+enum FinancialStatementType {
+  BS
+  PL
+}
+
+enum ImportStatus {
+  CONVERSION_UNNECESSARY
+  CONVERTED
+  NO_RULES_FOUND
+}
+
+enum IntegrationServiceType {
+  CA
+  CA_MID
+}
+
+enum InversionMultiplier {
+  MINUS
+  PLUS
+}
+
+enum JobStatus {
+  COMPLETED
+  FAILED
+  PENDING
+}
+
+enum JobStatusMessageType {
+  CARRY_FORWARD
+  CARRY_FORWARD_RESET
+  IMPORT_CONSOLIDATION_PACKAGE_FROM_CA
+  IMPORT_CONSOLIDATION_PACKAGE_FROM_CAMID
+  IMPORT_CONSOLIDATION_PACKAGE_FROM_EXCEL_FILE
+}
+
+enum JournalGroupKeyError {
+  EMPTY_KEY
+  NEITHER_ALPHANUMERIC_NOR_AVAILABLE_SYMBOL_KEY
+  TOO_LONG_KEY
+}
+
+enum JournalOperation {
+  IMPORT
+  RESET
+}
+
+enum OfficeMemberError {
+  HAS_OTHER_ROLE_BESIDE_VIEWER_ROLE
+  NO_OFFICE_MEMBER_CAN_MANAGE_USERS
+}
+
+enum OfficeMemberUndeletableReason {
+  LAST_USER_MANAGER
+}
+
+enum OpeningClassification {
+  BEGINNING
+  CURRENT
+}
+
+enum OpeningJournalType {
+  CARRY_FORWARD
+  ELIMINATION
+}
+
+enum PermissionFunction {
+  CONSOLIDATION_ACCOUNTING
+  CONSOLIDATION_ACCOUNTING_VIEW
+  IMPORT_SETTING_MANAGEMENT
+  IMPORT_SETTING_VIEW
+  PKG_IMPORT_ALL
+  PKG_IMPORT_BY_COMPANY
+  PKG_VIEW_ALL
+  PKG_VIEW_BY_COMPANY
+  USER_MANAGEMENT
+  USER_VIEW
+}
+
+enum RemarkError {
+  INVALID_FORMAT_REMARK
+  TOO_LONG_REMARK
+}
+
+enum ReservedConsolidatedAccountsError {
+  CURRENT_RESERVED_CONSOLIDATED_ACCOUNTS_ARE_IN_USE
+  TO_BE_RESERVED_CONSOLIDATED_ACCOUNTS_ARE_IN_USE
+  TO_BE_RESERVED_CONSOLIDATED_ACCOUNTS_ARE_NOT_ASSIGNED
+  TO_BE_RESERVED_CONSOLIDATED_ACCOUNTS_SOME_PROPERTIES_NOT_MATCHED
+}
+
+enum RetainedEarningsPreviewWarning {
+  INCONSISTENT_AMOUNT_OF_RETAINED_EARNINGS
+}
+
+enum SegmentAbbreviationError {
+  CORRESPONDING_SEGMENT_NOT_FOUND
+  INVALID_FORMAT_SEGMENT_ABBREVIATION
+  TOO_LONG_SEGMENT_ABBREVIATION
+}
+
+enum SimilarAccountRecommendationFailureReason {
+  INVALID_REQUEST
+  SERVER_ERROR
+}
+
+enum TranslationAdjustmentPreviewWarning {
+  INCONSISTENT_AMOUNT_OF_TRANSLATION_ADJUSTMENTS
+}
+
+enum UnitLockStatus {
+  LOCKED
+  UNLOCKED
+}
+
+enum UserLanguage {
+  EN
+  JA
+}
+
+"An RFC-3339 compliant Full Date Scalar"
+scalar Date
+
+"A slightly refined version of RFC-3339 compliant DateTime Scalar"
+scalar DateTime
+
+scalar LocalDateTime
+
+input AccountCodePreviewInput {
+  errors: [previewConsolidationJournalInput!]!
+  value: String!
+}
+
+input AccountConversionRulePreviewInput {
+  code: String!
+  consolidatedAccountId: ID
+  id: ID
+  inversionMultiplier: InversionMultiplier!
+  isAdd: Boolean!
+  names: [String!]!
+  skipReason: ConversionRuleSkipReason
+  workClassificationId: ID!
+}
+
+input AccountConversionRuleRecommendationQueryInput {
+  accountTargets: [AccountRecommendationTargetTypeInput!]!
+  consolidationAccountingUnitId: ID!
+}
+
+input AccountRecommendationTargetTypeInput {
+  accountCode: String!
+  accountName: String!
+}
+
+input AssignedConsolidatedAccountInputTypeInput {
+  consolidatedAccountId: ID!
+  newSortOrder: Int!
+}
+
+input BalancePreviewErrorInput {
+  error: BalanceError!
+  message: String!
+}
+
+input BalancePreviewInput {
+  errors: [BalancePreviewErrorInput!]!
+  value: Float
+}
+
+input BuildCaAccountConversionRulePreviewMutationInput {
+  caIntegrationSettingId: ID!
+  consolidationAccountingUnitId: ID!
+  consolidationPackageId: ID!
+  endMonth: Int!
+  fiscalYear: Int!
+  startMonth: Int!
+}
+
+input BuildCamidAccountConversionRulePreviewMutationInput {
+  camidIntegrationSettingId: ID!
+  consolidationAccountingUnitId: ID!
+  consolidationPackageId: ID!
+  endDate: LocalDateTime!
+  startDate: LocalDateTime!
+}
+
+input BuildConsolidatedAccountsPreviewMutationInput {
+  clientMutationId: String
+  fileKey: String!
+  fileName: String!
+}
+
+input CarryForwardExecutingStatusSubscriptionInput {
+  currentConsolidationAccountingUnitId: ID!
+}
+
+input CarryForwardInput {
+  consolidationAccountingUnitId: ID!
+}
+
+input CompanyAbbreviationPreviewErrorInput {
+  error: CompanyAbbreviationError!
+  message: String!
+}
+
+input CompanyAbbreviationPreviewInput {
+  companyId: ID
+  errors: [CompanyAbbreviationPreviewErrorInput!]!
+  value: String!
+}
+
+input CompanyIdSortOrderInput {
+  id: ID!
+  sortOrder: Int!
+}
+
+input CompanyInput {
+  abbreviation: String!
+  currency: Currency!
+  decimalPlace: Int!
+  nameEn: String
+  nameJa: String!
+  remarks: String
+}
+
+input ConsolidatedAccountAmountTypePreviewInput {
+  amountType: AmountType
+  errors: [String!]!
+  value: String!
+}
+
+input ConsolidatedAccountCodePreviewInput {
+  errors: [String!]!
+  value: String!
+}
+
+input ConsolidatedAccountConversionTypePreviewInput {
+  errors: [String!]!
+  type: ConversionType
+  value: String!
+}
+
+input ConsolidatedAccountImportSettingInput {
+  amountTypeColumn: String!
+  codeColumn: String!
+  consolidatedAccountSubCategoryColumn: String!
+  conversionTypeColumn: String!
+  endRow: Int!
+  id: ID
+  nameEnColumn: String
+  nameJaColumn: String!
+  sheetName: String!
+  startRow: Int!
+}
+
+input ConsolidatedAccountNameEnPreviewInput {
+  errors: [String!]!
+  value: String
+}
+
+input ConsolidatedAccountNameJaPreviewInput {
+  errors: [String!]!
+  value: String!
+}
+
+input ConsolidatedAccountPreviewRowInput {
+  accountSide: AccountSide
+  amountType: ConsolidatedAccountAmountTypePreviewInput!
+  code: ConsolidatedAccountCodePreviewInput!
+  conversionType: ConsolidatedAccountConversionTypePreviewInput!
+  nameEn: ConsolidatedAccountNameEnPreviewInput!
+  nameJa: ConsolidatedAccountNameJaPreviewInput!
+  subCategory: ConsolidatedAccountSubCategoryPreviewInput!
+}
+
+input ConsolidatedAccountSubCategoryPreviewInput {
+  errors: [String!]!
+  subCategoryId: ID
+  value: String!
+}
+
+input ConsolidationJournalPreviewErrorInput {
+  error: ConsolidationJournalError!
+  message: String!
+}
+
+input ConsolidationJournalPreviewInput {
+  errors: [ConsolidationJournalPreviewErrorInput!]!
+  journalGroupKey: JournalGroupKeyPreviewInput!
+  rows: [ConsolidationJournalPreviewRowInput!]!
+  totalCreditBalance: Float!
+  totalDebitBalance: Float!
+}
+
+input ConsolidationJournalPreviewRowErrorInput {
+  error: ConsolidationJournalRowError!
+  message: String!
+}
+
+input ConsolidationJournalPreviewRowInput {
+  accountCode: AccountCodePreviewInput!
+  companyAbbreviation: CompanyAbbreviationPreviewInput!
+  creditBalance: BalancePreviewInput!
+  debitBalance: BalancePreviewInput!
+  errors: [ConsolidationJournalPreviewRowErrorInput!]!
+  id: ID!
+  journalGroupKey: JournalGroupKeyPreviewInput!
+  openingClassification: OpeningClassification!
+  remark: RemarkPreviewInput!
+  segmentAbbreviation: SegmentAbbreviationPreviewInput!
+}
+
+input ConsolidationPackageImportStatusesSubscriptionInput {
+  consolidationAccountingUnitId: ID!
+}
+
+input CreateAccountConversionRulePreviewInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  consolidationPackageId: ID!
+  consolidationPackageImportSettingId: ID!
+  fileName: String!
+  fileUrl: String!
+}
+
+input CreateCompanyMutationInput {
+  clientMutationId: String
+  companyInput: CompanyInput!
+}
+
+input CreateConsolidatedAccountMutationInput {
+  amountType: AmountType!
+  clientMutationId: String
+  code: String!
+  consolidatedAccountSubCategoryId: ID!
+  conversionType: ConversionType!
+  description: String
+  nameEn: String
+  nameJa: String!
+}
+
+input CreateConsolidationAccountingUnitCompanyInput {
+  companyId: ID!
+  consolidationProcessType: ConsolidationProcessType!
+  sortOrder: Int!
+  submissionRequired: Boolean!
+}
+
+input CreateConsolidationAccountingUnitMutationInput {
+  assignedAccountsCopySourceConsolidationAccountingUnitId: ID
+  clientMutationId: String
+  companies: [CreateConsolidationAccountingUnitCompanyInput!]!
+  description: String
+  endDate: Date!
+  nameEn: String
+  nameJa: String!
+  preConsolidationAccountingUnitId: ID
+  startDate: Date!
+  workClassificationId: ID!
+}
+
+input CreateConsolidationJournalCsvExportUrlMutationInput {
+  consolidationAccountingUnitId: ID!
+}
+
+input CreateConsolidationJournalImportFileDownloadUrlMutationInput {
+  clientMutationId: String
+  uploadedFileId: ID!
+}
+
+input CreateConsolidationJournalImportFileUploadUrlMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  fileName: String!
+}
+
+input CreateConsolidationJournalPreviewMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  fileName: String!
+  journalTypeId: ID!
+  key: String!
+}
+
+input CreateConsolidationJournalTypeMutationInput {
+  clientMutationId: String
+  name: String!
+  openingJournalType: OpeningJournalType!
+  remarks: String
+}
+
+input CreateConsolidationPackageImportFileUploadUrlMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  fileName: String!
+}
+
+input CreateConsolidationPackageImportSettingMutationInput {
+  clientMutationId: String
+  name: String!
+  trialBalanceImportSettings: [CreateTrialBalanceImportSettingInput!]!
+}
+
+input CreateConsolidationWorksheetCsvExportUrlMutationInput {
+  consolidationAccountingUnitId: ID!
+}
+
+input CreateOfficeMemberMutationInput {
+  clientMutationId: String
+  description: String
+  roleIds: [ID!]!
+  tenantUserUid: String!
+}
+
+input CreateOfficeMutationInput {
+  accountingUnitEndDate: Date!
+  accountingUnitNameJa: String!
+  accountingUnitStartDate: Date!
+  clientMutationId: String
+  tenantUid: ID!
+  tenantUserUid: ID!
+}
+
+input CreateSegmentMutationInput {
+  abbreviation: String!
+  clientMutationId: String
+  description: String
+  nameEn: String
+  nameJa: String!
+}
+
+input CreateTimeLimitedDownloadUrlMutationInput {
+  uploadedFileId: ID!
+}
+
+input CreateTrialBalanceImportSettingInput {
+  accountCodeColumn: String!
+  accountNameColumn: String!
+  balanceColumn: String!
+  endRow: Int!
+  sheetName: String!
+  startRow: Int!
+}
+
+input CreateWorkClassificationMutationInput {
+  clientMutationId: String
+  code: WorkClassificationCodeInput!
+  description: String
+  nameEn: String
+  nameJa: String!
+}
+
+input DeleteCaIntegrationSettingMutationInput {
+  caIntegrationSettingId: ID!
+  clientMutationId: String
+}
+
+input DeleteCamidIntegrationSettingMutationInput {
+  camidIntegrationSettingId: ID!
+  clientMutationId: String
+}
+
+input DeleteCompanyMutationInput {
+  clientMutationId: String
+  id: ID!
+}
+
+input DeleteConsolidatedAccountMutationInput {
+  clientMutationId: String
+  id: ID!
+}
+
+input DeleteConsolidationJournalRowsMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  journalTypeId: ID!
+}
+
+input DeleteConsolidationJournalTypeMutationInput {
+  clientMutationId: String
+  consolidationJournalTypeId: ID!
+}
+
+input DeleteConsolidationPackageImportSettingInput {
+  clientMutationId: String
+  id: ID!
+}
+
+input DeleteOfficeMemberMutationInput {
+  clientMutationId: String
+  officeMemberId: ID!
+}
+
+input DeleteWorkClassificationMutationInput {
+  clientMutationId: String
+  id: ID!
+}
+
+input ExportBalanceSheetBySubCategoryMutationInput {
+  conacUnitID: ID!
+  packageID: ID!
+}
+
+input ExportBalanceSheetMutationInput {
+  conacUnitID: ID!
+  packageID: ID!
+}
+
+input ExportPLSheetMutationInput {
+  conacUnitID: ID!
+  packageID: ID!
+}
+
+input ExportProfitLossSheetBySubCategoryMutationInput {
+  conacUnitID: ID!
+  packageID: ID!
+}
+
+input GenerateConsolidatedAccountFileUploadUrlMutationInput {
+  clientMutationId: String
+  fileName: String!
+}
+
+input IdSortOrderInput {
+  id: ID!
+  sortOrder: Int!
+}
+
+input ImportConsolidatedAccountMutationInput {
+  clientMutationId: String
+  previewRows: [ConsolidatedAccountPreviewRowInput!]!
+}
+
+input ImportConsolidationJournalsMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  consolidationJournalPreviews: [ConsolidationJournalPreviewInput!]!
+  consolidationJournalTypeId: ID!
+  uploadedFileId: ID!
+}
+
+input ImportConsolidationPackageFromExternalServiceMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  consolidationPackageId: ID!
+  integrationServiceType: IntegrationServiceType!
+  subscriptionId: String!
+  trialBalancePreviews: [TrialBalancePreviewInput!]!
+}
+
+input ImportConsolidationPackageMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  consolidationPackageId: ID!
+  consolidationPackageImportSettingId: ID!
+  subscriptionId: String!
+  uploadedFileId: ID!
+}
+
+input JobSubscriptionInput {
+  jobId: ID!
+}
+
+input JournalGroupKeyPreviewErrorInput {
+  error: JournalGroupKeyError!
+  message: String!
+}
+
+input JournalGroupKeyPreviewInput {
+  errors: [JournalGroupKeyPreviewErrorInput!]!
+  value: String!
+}
+
+input LoginOfficeMutationInput {
+  clientMutationId: String
+  tenantUid: ID!
+}
+
+input LoginOfficeSsoMutationInput {
+  tenantUidLongValue: String!
+}
+
+input RemarkPreviewErrorInput {
+  error: RemarkError!
+  message: String!
+}
+
+input RemarkPreviewInput {
+  errors: [RemarkPreviewErrorInput!]!
+  value: String!
+}
+
+input ResetCarryForwardMutationInput {
+  consolidationAccountingUnitId: ID!
+}
+
+input ResetConsolidationPackageMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  consolidationPackageId: ID!
+  resetBalanceAdjustment: Boolean!
+  resetConsolidationPackage: Boolean!
+  resetTranslationAdjustment: Boolean!
+}
+
+input SegmentAbbreviationPreviewErrorInput {
+  error: SegmentAbbreviationError!
+  message: String!
+}
+
+input SegmentAbbreviationPreviewInput {
+  errors: [SegmentAbbreviationPreviewErrorInput!]!
+  segmentId: ID
+  value: String!
+}
+
+input SegmentIdSortOrderInput {
+  id: ID!
+  sortOrder: Int!
+}
+
+input TrialBalanceImportStatusSubscriptionInput {
+  consolidationPackageId: ID!
+}
+
+input TrialBalancePreviewInput {
+  accountCode: String!
+  accountName: String!
+  balance: Float!
+}
+
+input UpdateAccountConversionRuleMutationInput {
+  clientMutationId: String
+  consolidationPackageId: ID!
+  rulePreviews: [AccountConversionRulePreviewInput!]!
+}
+
+input UpdateAssignedConsolidatedAccountsMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  items: [AssignedConsolidatedAccountInputTypeInput!]!
+}
+
+input UpdateBSTranslationAdjustmentInput {
+  afterTranslationBalance: Float!
+  assignedConsolidatedAccountId: ID!
+  beforeTranslationBalance: Float
+  openingClassification: OpeningClassification!
+  remark: String
+}
+
+input UpdateBSTranslationAdjustmentsMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  financialStatementId: ID!
+  translationAdjustments: [UpdateBSTranslationAdjustmentInput!]!
+}
+
+input UpdateBsBalanceAdjustmentsMutationInput {
+  balanceAdjustments: [UpdateBsBalanceAdjustmentsMutationInputItemInput!]!
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  financialStatementId: ID!
+}
+
+input UpdateBsBalanceAdjustmentsMutationInputItemInput {
+  adjustment: Float!
+  assignedConsolidatedAccountId: ID!
+  remark: String!
+}
+
+input UpdateCompanyMutationInput {
+  clientMutationId: String
+  id: ID!
+  nameEn: String
+  nameJa: String!
+  remarks: String
+}
+
+input UpdateCompanySortOrderMutationInput {
+  clientMutationId: String
+  idSortOrders: [CompanyIdSortOrderInput!]!
+}
+
+input UpdateConsolidatedAccountMutationInput {
+  clientMutationId: String
+  description: String
+  id: ID!
+  nameEn: String
+  nameJa: String!
+}
+
+input UpdateConsolidationAccountingUnitCompanyInput {
+  companyId: ID!
+  consolidationProcessType: ConsolidationProcessType!
+  sortOrder: Int!
+  submissionRequired: Boolean!
+}
+
+input UpdateConsolidationAccountingUnitLockStatusMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  lockStatus: UnitLockStatus!
+}
+
+input UpdateConsolidationAccountingUnitMutationInput {
+  clientMutationId: String
+  companies: [UpdateConsolidationAccountingUnitCompanyInput!]!
+  description: String
+  endDate: Date!
+  id: ID!
+  nameEn: String
+  nameJa: String!
+  preConsolidationAccountingUnitId: ID
+  startDate: Date!
+  workClassificationId: ID!
+}
+
+input UpdateConsolidationJournalTypeMutationInput {
+  clientMutationId: String
+  id: ID!
+  name: String!
+  openingJournalType: OpeningJournalType!
+  remarks: String
+}
+
+input UpdateConsolidationJournalTypeSortOrderMutationInput {
+  clientMutationId: String
+  idSortOrders: [IdSortOrderInput!]!
+}
+
+input UpdateConsolidationPackageImportSettingMutationInput {
+  clientMutationId: String
+  id: ID!
+  name: String!
+  trialBalanceImportSettings: [UpdateTrialBalanceImportSettingInput!]!
+}
+
+input UpdateExchangeRateInput {
+  averageRate: Float!
+  currentRate: Float!
+  id: ID!
+}
+
+input UpdateExchangeRatesMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  exchangeRateInputs: [UpdateExchangeRateInput!]!
+}
+
+input UpdateOfficeMemberMutationInput {
+  clientMutationId: String
+  description: String
+  officeMemberId: ID!
+  roleIds: [ID!]!
+}
+
+input UpdateOrCreateConsolidationJournalImportSettingMutationInput {
+  clientMutationId: String
+  companyAbbreviationColumn: String!
+  consolidatedAccountCodeColumn: String!
+  consolidationAccountingUnitId: ID!
+  consolidationJournalGroupKeyColumn: String!
+  consolidationJournalTypeId: ID!
+  creditBalanceColumn: String!
+  debitBalanceColumn: String!
+  endRow: Int!
+  id: ID
+  remarkColumn: String
+  segmentAbbreviationColumn: String
+  sheetName: String!
+  startRow: Int!
+}
+
+input UpdatePLTranslationAdjustmentInput {
+  afterTranslationBalance: Float!
+  assignedConsolidatedAccountId: ID!
+  beforeTranslationBalance: Float
+  openingClassification: OpeningClassification!
+  remark: String
+}
+
+input UpdatePLTranslationAdjustmentsMutationInput {
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  financialStatementId: ID!
+  translationAdjustments: [UpdatePLTranslationAdjustmentInput!]!
+}
+
+input UpdatePlBalanceAdjustmentsMutationInput {
+  balanceAdjustments: [UpdatePlBalanceAdjustmentsMutationInputItemInput!]!
+  clientMutationId: String
+  consolidationAccountingUnitId: ID!
+  financialStatementId: ID!
+}
+
+input UpdatePlBalanceAdjustmentsMutationInputItemInput {
+  adjustment: Float!
+  assignedConsolidatedAccountId: ID!
+  remark: String!
+}
+
+input UpdateReservedConsolidatedAccountsMutationInput {
+  clientMutationId: String
+  foreignCurrencyTranslationAdjustmentAccountId: ID!
+  foreignExchangeLossesNoeAccountId: ID!
+  profitBSAccountId: ID!
+  retainedEarningsBroughtForwardAccountId: ID!
+}
+
+input UpdateSegmentMutationInput {
+  clientMutationId: String
+  description: String
+  id: ID!
+  nameEn: String
+  nameJa: String!
+}
+
+input UpdateSegmentSortOrderMutationInput {
+  clientMutationId: String
+  idSortOrders: [SegmentIdSortOrderInput!]!
+}
+
+input UpdateTrialBalanceImportSettingInput {
+  accountCodeColumn: String!
+  accountNameColumn: String!
+  balanceColumn: String!
+  endRow: Int!
+  sheetName: String!
+  startRow: Int!
+}
+
+input UpdateUserStatusMutationInput {
+  clientMutationId: String
+  newUnitId: ID!
+}
+
+input UpdateWorkClassificationInput {
+  description: String
+  id: ID!
+  nameEn: String
+  nameJa: String!
+}
+
+input UpdateWorkClassificationMutationInput {
+  clientMutationId: String
+  workClassificationInput: UpdateWorkClassificationInput!
+}
+
+input UpsertConsolidatedAccountImportSettingMutationInput {
+  clientMutationId: String
+  consolidatedAccountImportSetting: ConsolidatedAccountImportSettingInput!
+}
+
+input WorkClassificationCodeInput {
+  code: String!
+}
+
+input previewConsolidationJournalInput {
+  error: AccountCodeError!
+  message: String!
+}

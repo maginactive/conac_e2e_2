@@ -1,0 +1,12 @@
+mutation updateConsolidationAccountingUnitLockStatus(
+  $input: UpdateConsolidationAccountingUnitLockStatusMutationInput!
+) {
+  updateConsolidationAccountingUnitLockStatus(input: $input) {
+    consolidationAccountingUnit {
+      id
+      nameJa
+      lockStatus
+    }
+    clientMutationId
+  }
+}

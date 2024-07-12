@@ -1,0 +1,7 @@
+mutation CreateOfficeMember($input: CreateOfficeMemberMutationInput!) {
+  createOfficeMember(input: $input) {
+    officeMember {
+      name
+    }
+  }
+}

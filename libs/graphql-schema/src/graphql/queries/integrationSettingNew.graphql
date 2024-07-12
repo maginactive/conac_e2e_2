@@ -1,0 +1,28 @@
+query IntegrationSettingNew {
+  office {
+    companies {
+      id
+      nameJa
+    }
+    integrationSettings {
+      ... on CamidIntegrationSetting {
+        id
+        company {
+          id
+          nameJa
+        }
+      }
+      ... on CaIntegrationSetting {
+        id
+        company {
+          id
+          nameJa
+        }
+      }
+      integrationService {
+        type
+        name
+      }
+    }
+  }
+}

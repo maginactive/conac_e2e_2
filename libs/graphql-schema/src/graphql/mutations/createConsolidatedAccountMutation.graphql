@@ -1,0 +1,15 @@
+mutation CreateConsolidatedAccount(
+  $input: CreateConsolidatedAccountMutationInput!
+) {
+  createConsolidatedAccount(input: $input) {
+    clientMutationId
+    userErrors {
+      message
+      field
+    }
+    consolidatedAccount {
+      nameJa
+      nameEn
+    }
+  }
+}

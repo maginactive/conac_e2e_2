@@ -1,0 +1,26 @@
+query TrialBalance($consolidationAccountingUnitId: ID!, $id: ID!) {
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    consolidationPackage(id: $id) {
+      trialBalance {
+        rows {
+          id
+          accountCode
+          assignedConsolidatedAccount {
+            consolidatedAccount {
+              code {
+                code
+              }
+              nameJa
+            }
+          }
+          accountName
+          balance
+          importStatus
+          importedBalance
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+mutation DeleteConsolidationPackageImportSetting(
+  $input: DeleteConsolidationPackageImportSettingInput!
+) {
+  deleteConsolidationPackageImportSetting(input: $input) {
+    clientMutationId
+  }
+}

@@ -1,0 +1,263 @@
+/*
+This script integrates Playwright with TestRail, a test case management tool. It involves
+- mapping test statuses
+- initializing TestRail API credentials
+- creating test runs, adding test results
+- and setting comments for test cases based on their status
+*/
+
+import TestRail, { AddResultsForCases } from '@dlenroc/testrail';
+import {
+  FullConfig,
+  FullResult,
+  Reporter,
+  Suite,
+  TestCase,
+  TestError,
+  TestResult,
+} from '@playwright/test/reporter';
+
+/**
+ * Mapping status within Playwright & TestRail
+ * Đối tượng StatusMap ánh xạ các trạng thái của Playwright sang các trạng thái tương ứng của TestRail
+ */
+const StatusMap = new Map<string, number>([
+  ['failed', 5],
+  ['passed', 1],
+  ['skipped', 3],
+  ['timedout', 5],
+  ['interrupted', 5],
+  /* https://support.testrail.com/hc/en-us/articles/7077935129364-Statuses#getstatuses
+  1	Passed, 2	Blocked, 3	Untested, 4	Retest, 5	Failed
+  */
+]);
+
+/**
+ * Initialise TestRail API credential auth
+ * Khởi tạo thông tin xác thực API của TestRail
+ */
+
+//Thời gian thực thi: Lấy thời gian hiện tại để đặt tên cho lần chạy.
+const executionDateTime = Date().toString().slice(4, 25);
+
+//khởi tạo API của TestRail bằng cách sử dụng các biến môi trường cho host, username và password. Tên của lần chạy (run name),
+//ID dự án (project ID) và ID của suite (suite ID) cũng được thiết lập bằng cách sử dụng các biến môi trường.
+const api = new TestRail({
+  host: process.env.TESTRAIL_HOST as string,
+  password: process.env.TESTRAIL_PASSWORD as string,
+  username: process.env.TESTRAIL_USERNAME as string,
+});
+
+const runName =
+  process.env.TESTRAIL_RUN_NAME + ' - Created On ' + executionDateTime;
+const projectId = parseInt(process.env.TESTRAIL_PROJECT_ID as string);
+const suiteId = parseInt(process.env.TESTRAIL_SUITE_ID as string);
+
+//Mảng kết quả kiểm tra: Một mảng trống để lưu trữ kết quả kiểm tra
+const testResults: AddResultsForCases[] = [];
+
+/**Lớp TestRail Reporter
+ * Phương thức onBegin: Phương thức này chạy khi bắt đầu chạy bộ kiểm thử.
+ * Nếu ID của lần chạy TestRail không được cung cấp, nó sẽ tạo một lần chạy mới.
+ * Nếu ID được cung cấp, nó sẽ sử dụng lần chạy đó.
+ *
+ * Phương thức onTestEnd: Chạy khi một trường hợp kiểm thử kết thúc.
+ * Nó ghi lại trạng thái của trường hợp kiểm thử và cập nhật mảng kết quả với ID trường hợp kiểm thử,
+ * trạng thái và nhận xét nếu kiểm thử không bị bỏ qua.
+ **/
+export class TestRailReporter implements Reporter {
+  async onBegin?(config: FullConfig, suite: Suite) {
+    if (!process.env.TESTRAIL_RUN_ID) {
+      console.log("No Existing 'TESTRAIL_RUN_ID' provided by user...");
+      console.log('Automatically creating a run...');
+      await addTestRailRun(projectId);
+    } else {
+      console.log(
+        'Existing Test Run with ID ' +
+          process.env.TESTRAIL_RUN_ID +
+          ' will be used'
+      );
+    }
+  }
+
+  /** Phương thức onTestEnd: Chạy khi một trường hợp kiểm thử kết thúc.
+   * Nó ghi lại trạng thái của trường hợp kiểm thử và cập nhật mảng kết quả với ID trường hợp kiểm thử,
+   * trạng thái và nhận xét nếu kiểm thử không bị bỏ qua.
+   **/
+  onTestEnd(test: TestCase, result: TestResult) {
+    console.log(
+      `Test Case Completed : ${test.title} Status : ${result.status}`
+    );
+
+    //Return no test case match with TestRail Case ID Regex
+    const testCaseMatches = getTestCaseName(test.title);
+    if (testCaseMatches != null) {
+      testCaseMatches.forEach((testCaseMatch) => {
+        const testId = parseInt(testCaseMatch.substring(1), 10);
+        //Update test status if test case is not skipped
+        if (result.status != 'skipped') {
+          const testComment = setTestComment(result);
+          const payload = {
+            case_id: testId,
+            status_id: StatusMap.get(result.status),
+            comment: testComment,
+          };
+          testResults.push(payload);
+        }
+      });
+    }
+  }
+
+  /** Phương thức onEnd: Chạy khi kết thúc bộ kiểm thử.
+   * Nó cập nhật TestRail với các kết quả kiểm thử đã thu thập được.
+   **/
+  async onEnd(result: FullResult): Promise<void> {
+    const runId = parseInt(process.env.TESTRAIL_RUN_ID as string);
+    console.log(
+      'Updating test status for the following TestRail Run ID: ' + runId
+    );
+    await updateResultCases(runId, testResults);
+  }
+
+  //Phương thức onError: Ghi lại bất kỳ lỗi nào gặp phải trong quá trình chạy kiểm thử.
+  onError(error: TestError): void {
+    console.log(error.message);
+  }
+}
+
+
+/**
+ * Get list of matching Test IDs
+ * Hàm getTestCaseName: Trích xuất các ID trường hợp kiểm thử từ tên trường hợp kiểm thử 
+ * bằng cách sử dụng biểu thức chính quy. Nó ghi lại các ID trường hợp khớp.
+ */
+export function getTestCaseName(testname: string) {
+  const testCaseIdRegex = /\bC(\d+)\b/g;
+  const testCaseMatches = [testname.match(testCaseIdRegex)];
+
+  if (testCaseMatches[0] != null) {
+    testCaseMatches[0].forEach((testCaseMatch) => {
+      const testCaseId = parseInt(testCaseMatch.substring(1), 10);
+      console.log('Matched Test Case ID: ' + testCaseId);
+    });
+  } else {
+    console.log('No test case matches available');
+  }
+  return testCaseMatches[0];
+}
+
+/**
+ * Hàm addTestRailRun: Tạo một lần chạy kiểm thử mới trên TestRail với ID dự án đã cho, 
+ * bao gồm tất cả các kiểm thử trong suite. 
+ * Nó ghi lại ID của lần chạy mới hoặc lỗi nếu việc tạo thất bại.
+ * Create TestRail Test Run ID
+ * @param projectId
+ * @returns
+ */
+async function addTestRailRun(projectId: number) {
+  return await api
+    .addRun(projectId, {
+      include_all: true,
+      name: runName,
+      suite_id: suiteId,
+    })
+    .then(
+      (res) => {
+        console.log(
+          'New TestRail run has been created: ' +
+            process.env.TESTRAIL_HOST +
+            '/index.php?/runs/view/' +
+            res.id
+        );
+        process.env.TESTRAIL_RUN_ID = res.id.toString();
+      },
+      (reason) => {
+        console.log('Failed to create new TestRail run: ' + reason);
+      }
+    );
+}
+
+/**
+ * Hàm addResultForSuite: Cập nhật kết quả cho một trường hợp kiểm thử 
+ * trong TestRail với ID của lần chạy, ID của trường hợp, trạng thái và nhận xét đã cho.
+ * Add Test Result for TestSuite by Test Case ID/s
+ * @param api
+ * @param runId
+ * @param caseId
+ * @param status
+ */
+async function addResultForSuite(
+  api: TestRail,
+  runId: number,
+  caseId: number,
+  status: number,
+  comment: string
+) {
+  await api
+    .addResultForCase(runId, caseId, {
+      status_id: status,
+      comment: comment,
+    })
+    .then(
+      (res) => {
+        console.log(
+          'Updated status for caseId ' + caseId + ' for runId ' + runId
+        );
+      },
+      (reason) => {
+        console.log(
+          'Failed to call Update Api due to ' + JSON.stringify(reason)
+        );
+      }
+    );
+}
+/**
+ * Hàm setTestComment: Tạo nhận xét dựa trên kết quả kiểm thử. 
+ * Nếu kiểm thử thất bại, hết thời gian hoặc bị gián đoạn, nó bao gồm chi tiết lỗi. 
+ * Nếu kiểm thử thành công, nó bao gồm thời gian kiểm thử.
+ * Set Test comment for TestCase Failed | Passed
+ * @param result
+ * @returns
+ */
+
+function setTestComment(result: TestResult) {
+  if (
+    result.status == 'failed' ||
+    result.status == 'timedOut' ||
+    result.status == 'interrupted'
+  ) {
+    return (
+      'Test Status is ' + result.status + ' ' + JSON.stringify(result.error)
+    );
+  } else {
+    return 'Test Passed within ' + result.duration + ' ms';
+  }
+}
+
+/**
+ * Hàm updateResultCases: Cập nhật nhiều kết quả kiểm thử trong TestRail với ID của lần chạy 
+ * và payload của kết quả kiểm thử.
+ * Update TestResult for Multiple Cases
+ * @param api
+ * @param runId
+ * @param payload
+ */
+async function updateResultCases(runId: number, payload: any) {
+  await api
+    .addResultsForCases(runId, {
+      results: payload,
+    })
+    .then(
+      (result) => {
+        console.log(
+          'Updated test results for Test Run: ' +
+            process.env.TESTRAIL_HOST +
+            '/index.php?/runs/view/' +
+            runId
+        );
+      },
+      (reason) => {
+        console.log('Failed to update test results: ' + JSON.stringify(reason));
+      }
+    );
+}

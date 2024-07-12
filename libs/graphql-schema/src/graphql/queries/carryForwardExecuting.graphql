@@ -1,0 +1,7 @@
+query CarryForwardExecuting($id: ID!) {
+  office {
+    consolidationAccountingUnit(id: $id) {
+      carryForwardExecuting
+    }
+  }
+}

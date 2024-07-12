@@ -1,0 +1,7 @@
+mutation DeleteCaIntegrationSetting(
+  $input: DeleteCaIntegrationSettingMutationInput!
+) {
+  deleteCaIntegrationSetting(input: $input) {
+    clientMutationId
+  }
+}

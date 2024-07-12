@@ -1,0 +1,115 @@
+query BalanceSheet($conacUnitId: ID!, $id: ID!, $companyId: ID!) {
+  office {
+    consolidationCurrency
+  }
+  consolidationAccountingUnit(consolidationAccountingUnitId: $conacUnitId) {
+    consolidationPackage(id: $id) {
+      balanceSheet {
+        id
+        rows {
+          translatedBalance
+          adjustedTranslatedBalance
+          adjustedBalance
+          balance
+          assignedConsolidatedAccount {
+            id
+            workClassificationId
+            sortOrder
+            consolidatedAccount {
+              consolidatedAccountSubCategory {
+                sortOrder
+                id
+              }
+              accountType
+              code {
+                code
+              }
+              conversionType
+              id
+              nameEn
+              nameJa
+              tenantUid
+              consolidatedAccountSubCategory {
+                id
+                nameEn
+                nameJa
+              }
+            }
+          }
+        }
+        balanceAdjustments {
+          id
+          assignedConsolidatedAccountId
+          amount
+          remark
+        }
+        translationAdjustments {
+          afterTranslationBalance
+          assignedConsolidatedAccountId
+          beforeTranslationBalance
+          id
+          openingClassification
+          remark
+        }
+        adjustedSummary {
+          assetsAmount
+          assetsItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          balanceAmount
+          liabilitiesAmount
+          liabilitiesItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          netAssetsAmount
+          netAssetsItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+        }
+        translatedSummary {
+          assetsAmount
+          assetsItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          balanceAmount
+          liabilitiesAmount
+          liabilitiesItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          netAssetsAmount
+          netAssetsItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+        }
+      }
+    }
+    exchangeRate(companyId: $companyId) {
+      currentRate
+      averageRate
+    }
+  }
+}

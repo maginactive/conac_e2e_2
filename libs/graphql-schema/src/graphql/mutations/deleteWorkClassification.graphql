@@ -1,0 +1,7 @@
+mutation DeleteWorkClassification(
+  $input: DeleteWorkClassificationMutationInput!
+) {
+  deleteWorkClassification(input: $input) {
+    clientMutationId
+  }
+}

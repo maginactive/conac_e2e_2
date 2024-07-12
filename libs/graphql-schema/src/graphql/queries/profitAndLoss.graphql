@@ -1,0 +1,151 @@
+query ProfitAndLoss(
+  $consolidationAccountingUnitId: ID!
+  $id: ID!
+  $companyId: ID!
+) {
+  office {
+    consolidationCurrency
+  }
+  consolidationAccountingUnit(
+    consolidationAccountingUnitId: $consolidationAccountingUnitId
+  ) {
+    consolidationPackage(id: $id) {
+      profitAndLoss {
+        id
+        rows {
+          adjustedTranslatedBalance
+          adjustedBalance
+          balance
+          translatedBalance
+          assignedConsolidatedAccount {
+            id
+            workClassificationId
+            sortOrder
+            consolidatedAccount {
+              consolidatedAccountSubCategory {
+                sortOrder
+                id
+              }
+              accountType
+              code {
+                code
+              }
+              conversionType
+              id
+              nameEn
+              nameJa
+              tenantUid
+              consolidatedAccountSubCategory {
+                id
+                nameEn
+                nameJa
+              }
+            }
+          }
+        }
+        balanceAdjustments {
+          id
+          assignedConsolidatedAccountId
+          amount
+          remark
+        }
+        translationAdjustments {
+          afterTranslationBalance
+          assignedConsolidatedAccountId
+          beforeTranslationBalance
+          id
+          openingClassification
+          remark
+        }
+        adjustedSummary {
+          grossProfitAmount
+          grossProfitItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          operatingProfitAmount
+          operatingProfitItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          ordinaryProfitAmount
+          ordinaryProfitItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          profitAttributableToOwnersOfParentAmount
+          profitAttributableToOwnersOfParentItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          profitBeforeIncomeTaxesAmount
+          profitBeforeIncomeTaxesItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+        }
+        translatedSummary {
+          grossProfitAmount
+          grossProfitItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          operatingProfitAmount
+          operatingProfitItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          ordinaryProfitAmount
+          ordinaryProfitItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          profitAttributableToOwnersOfParentAmount
+          profitAttributableToOwnersOfParentItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+          profitBeforeIncomeTaxesAmount
+          profitBeforeIncomeTaxesItems {
+            subCategory {
+              id
+              nameJa
+            }
+            amount
+          }
+        }
+      }
+    }
+    exchangeRate(companyId: $companyId) {
+      currentRate
+      averageRate
+    }
+  }
+}

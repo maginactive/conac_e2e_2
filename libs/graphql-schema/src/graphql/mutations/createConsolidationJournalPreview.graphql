@@ -1,0 +1,82 @@
+mutation CreateConsolidationJournalPreview(
+  $input: CreateConsolidationJournalPreviewMutationInput!
+) {
+  createConsolidationJournalPreview(input: $input) {
+    previews {
+      totalCreditBalance
+      totalDebitBalance
+      journalGroupKey {
+        value
+        errors {
+          error
+          message
+        }
+      }
+      rows {
+        id
+        accountCode {
+          assignedConsolidatedAccount {
+            id
+            consolidatedAccount {
+              nameJa
+              nameEn
+            }
+          }
+          value
+          errors {
+            error
+            message
+          }
+        }
+        companyAbbreviation {
+          companyId
+          value
+          errors {
+            error
+            message
+          }
+        }
+        creditBalance {
+          value
+          errors {
+            error
+            message
+          }
+        }
+        debitBalance {
+          value
+          errors {
+            error
+            message
+          }
+        }
+        segmentAbbreviation {
+          segmentId
+          value
+          errors {
+            error
+            message
+          }
+        }
+        openingClassification
+        remark {
+          value
+          errors {
+            error
+            message
+          }
+        }
+        errors {
+          error
+          message
+        }
+      }
+      errors {
+        error
+        message
+      }
+    }
+    uploadedFileId
+    error
+  }
+}
