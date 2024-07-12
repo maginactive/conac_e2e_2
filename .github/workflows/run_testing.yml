@@ -27,6 +27,7 @@ jobs:
           GHA_Meta: ${{ github.event.inputs.application }}
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+  
   run-tests:
     runs-on: ubuntu-latest
     steps:
@@ -39,3 +40,9 @@ jobs:
         run: npm install
       - name: Run tests
         run: npm test
+
+  notify-push-event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify push event
+        run: echo "Push event detected on branch ${{ github.ref }}"
