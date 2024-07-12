@@ -34,15 +34,16 @@ export class LoginPage extends BasePage {
     await this.page.goto(process.env['BASE_URL'] + '/login');
     await this.page.waitForLoadState();
     await this.loginWithMFid.click();
+    console.log("click ok")
     //print current url
-    console.log(this.page.url());
+    console.log("url1: ", this.page.url());
     // await expect(this.page).toHaveURL(
     //   new RegExp(`^${process.env['MFID_BASE_URL']}/sign_in?`)
     // );
     await this.emailInput.fill(email);
     await this.agreeAndSignIn.click();
     //print current url
-    console.log(this.page.url());
+    console.log("url2: ", this.page.url());
     // await expect(this.page).toHaveURL(
     //   new RegExp(`^${process.env['MFID_BASE_URL']}/sign_in/password`)
     // );
