@@ -114,7 +114,7 @@ export class TestRailReporter implements Reporter {
           console.log(
             'New TestRail run has been created: ' +
               process.env.TESTRAIL_HOST +
-              '/index.php?/runs/view/' +
+              'index.php?/runs/view/' +
               res.id
           );
           process.env.TESTRAIL_RUN_ID = res.id.toString();
@@ -176,7 +176,7 @@ export class TestRailReporter implements Reporter {
           console.log(
             'Updated test results for Test Run: ' +
               process.env.TESTRAIL_HOST +
-              '/index.php?/runs/view/' +
+              'index.php?/runs/view/' +
               runId
           );
         },
