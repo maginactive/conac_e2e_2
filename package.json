@@ -28,7 +28,7 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.1.0",
     "@nx/devkit": "17.0.1",
     "@nx/eslint": "17.0.1",
