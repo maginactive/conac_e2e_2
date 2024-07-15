@@ -2831,21 +2831,21 @@
     "@svgr/plugin-jsx" "8.1.0"
     "@svgr/plugin-svgo" "8.1.0"
 
-"@swc-node/core@^1.13.2":
-  version "1.13.2"
-  resolved "https://registry.yarnpkg.com/@swc-node/core/-/core-1.13.2.tgz#0b3b563edd2a8c951dbaeecfa1795b8cd1b29a30"
-  integrity sha512-skceAbeKUmEK8z1nxStJTTsbIInKqW4n4+ZCYFexy6UsHjsc7MAfR2v5QqNJr/Fl/j+yLY6UkXY2VUU63nEC/Q==
+"@swc-node/core@^1.13.3":
+  version "1.13.3"
+  resolved "https://registry.yarnpkg.com/@swc-node/core/-/core-1.13.3.tgz#0821d01263f48314392d38d80ef1a03fef5f11b3"
+  integrity sha512-OGsvXIid2Go21kiNqeTIn79jcaX4l0G93X2rAnas4LFoDyA9wAwVK7xZdm+QsKoMn5Mus2yFLCc4OtX2dD/PWA==
 
-"@swc-node/register@~1.10.3":
-  version "1.10.3"
-  resolved "https://registry.yarnpkg.com/@swc-node/register/-/register-1.10.3.tgz#7f426fbbc069edd73b7231edb2a1199601fa2639"
-  integrity sha512-QSffEXDGh/A6q0SWGEmnvKOqrCY0EiOLhAaS9KGxe2+0RKSOIjuBjTDilBLKHltudNCDkEE6kBljwGz7xoAREA==
+"@swc-node/register@~1.10.7":
+  version "1.10.7"
+  resolved "https://registry.yarnpkg.com/@swc-node/register/-/register-1.10.7.tgz#efa138e692df6052e438aa54a625d48f25aafb6c"
+  integrity sha512-rCL7bGJT58nZAQcVi3+khOIOHK0zmD96QLbI5wvimK3YJ9/F2Xsp804iXSdvGfbtFDwUD9R8aglriNNXsBiIVQ==
   dependencies:
-    "@swc-node/core" "^1.13.2"
+    "@swc-node/core" "^1.13.3"
     "@swc-node/sourcemap-support" "^0.5.1"
     colorette "^2.0.20"
     debug "^4.3.5"
-    oxc-resolver "^1.9.2"
+    oxc-resolver "^1.10.0"
     pirates "^4.0.6"
     tslib "^2.6.3"
 
@@ -8605,7 +8605,7 @@ os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha512-D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==
 
-oxc-resolver@^1.9.2:
+oxc-resolver@^1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/oxc-resolver/-/oxc-resolver-1.10.0.tgz#5a6d25bfec2ca8f7c504eae2bde699e7fcfa75a5"
   integrity sha512-FkObNl6JVrbqvvRqXCQhYZvrJHqEJNAjWDuPxHx9CblwoYzL5zcM74Ba30ek3YUopaUSNit3ceaILqShAx+hgw==

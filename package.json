@@ -42,7 +42,7 @@
     "@nx/vite": "19.4.2",
     "@nx/web": "19.4.2",
     "@nx/workspace": "^19.4.2",
-    "@swc-node/register": "~1.10.3",
+    "@swc-node/register": "~1.10.7",
     "@swc/core": "~1.6.13",
     "@swc/plugin-emotion": "^3.0.9",
     "@testing-library/react": "16.0.0",
