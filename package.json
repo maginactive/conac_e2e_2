@@ -36,7 +36,7 @@
     "@nx/devkit": "19.4.2",
     "@nx/eslint": "19.4.2",
     "@nx/eslint-plugin": "19.4.2",
-    "@nx/js": "^19.4.2",
+    "@nx/js": "^19.6.0",
     "@nx/playwright": "^19.4.2",
     "@nx/react": "19.4.2",
     "@nx/vite": "19.4.2",
